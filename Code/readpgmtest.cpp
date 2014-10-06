@@ -19,7 +19,7 @@ int q_start_y = 00;
 int q_goal_x = 00;
 int q_goal_y = 00;
 ///////////////////////// SET DIRECTORY /////////////////////////
-std::string andersind= "/Users/Anders/Documents/Robotteknologi/5. semester/ROB/Programming problem/xCode_the_cup_collector/Bane1.pgm";
+std::string andersind= "/Users/Anders/Documents/Robotteknologi/5. semester/ROB/Programming problem/xCode_the_cup_collector/complete_map_project.pgm";
 std::string andersout= "/Users/Anders/Documents/Robotteknologi/5. semester/ROB/Programming problem/xCode_the_cup_collector/test_out.pgm";
 std::string filenameind = andersind;
 std::string filenameout = andersout;
