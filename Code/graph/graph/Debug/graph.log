@@ -1,0 +1,67 @@
+﻿Build started 10/11/2014 11:08:36.
+     1>Project "C:\Users\Thomas\Cloud\ROB_E14\Code\graph\graph\graph.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt graph.cpp
+         graph.cpp
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::tuple<_Types...> &,const std::tuple<_Types1...> &)' : could not deduce template argument for 'const std::tuple<_Types...> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tuple(480) : see declaration of 'std::operator <'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(192) : while compiling class template member function 'bool std::less<_Kty>::operator ()(const _Ty &,const _Ty &) const'
+                 with
+                 [
+                     _Kty=graph::vertex_t
+         ,            _Ty=graph::vertex_t
+                 ]
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(176) : see reference to function template instantiation 'bool std::less<_Kty>::operator ()(const _Ty &,const _Ty &) const' being compiled
+                 with
+                 [
+                     _Kty=graph::vertex_t
+         ,            _Ty=graph::vertex_t
+                 ]
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\type_traits(572) : see reference to class template instantiation 'std::less<_Kty>' being compiled
+                 with
+                 [
+                     _Kty=graph::vertex_t
+                 ]
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xtree(1023) : see reference to class template instantiation 'std::is_empty<std::less<_Kty>>' being compiled
+                 with
+                 [
+                     _Kty=graph::vertex_t
+                 ]
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(70) : see reference to class template instantiation 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>' being compiled
+                 with
+                 [
+                     _Kty=graph::vertex_t
+         ,            _Ty=graph::neighbors_t
+         ,            _Pr=std::less<graph::vertex_t>
+         ,            _Alloc=std::allocator<std::pair<const graph::vertex_t,graph::neighbors_t>>
+                 ]
+                 c:\users\thomas\cloud\rob_e14\code\graph\graph\graph.h(26) : see reference to class template instantiation 'std::map<graph::vertex_t,graph::neighbors_t,std::less<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>' being compiled
+                 with
+                 [
+                     _Kty=graph::vertex_t
+         ,            _Ty=graph::neighbors_t
+                 ]
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::_Tree<_Traits> &,const std::_Tree<_Traits> &)' : could not deduce template argument for 'const std::_Tree<_Traits> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xtree(2259) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::vector<_Ty,_Alloc> &,const std::vector<_Ty,_Alloc> &)' : could not deduce template argument for 'const std::vector<_Ty,_Alloc> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\vector(1813) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::basic_string<_Elem,_Traits,_Alloc> &,const _Elem *)' : could not deduce template argument for 'const std::basic_string<_Elem,_Traits,_Alloc> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstring(2545) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const _Elem *,const std::basic_string<_Elem,_Traits,_Alloc> &)' : could not deduce template argument for 'const _Elem *' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstring(2535) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::basic_string<_Elem,_Traits,_Alloc> &,const std::basic_string<_Elem,_Traits,_Alloc> &)' : could not deduce template argument for 'const std::basic_string<_Elem,_Traits,_Alloc> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstring(2525) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::move_iterator<_RanIt> &,const std::move_iterator<_RanIt2> &)' : could not deduce template argument for 'const std::move_iterator<_RanIt> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(1997) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::reverse_iterator<_RanIt> &,const std::reverse_iterator<_RanIt2> &)' : could not deduce template argument for 'const std::reverse_iterator<_RanIt> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(1155) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::_Revranit<_RanIt,_Base> &,const std::_Revranit<_RanIt2,_Base2> &)' : could not deduce template argument for 'const std::_Revranit<_RanIt,_Base> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(971) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2784: 'bool std::operator <(const std::pair<_Ty1,_Ty2> &,const std::pair<_Ty1,_Ty2> &)' : could not deduce template argument for 'const std::pair<_Ty1,_Ty2> &' from 'const graph::vertex_t'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\utility(230) : see declaration of 'std::operator <'
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstddef(193): error C2676: binary '<' : 'const graph::vertex_t' does not define this operator or a conversion to a type acceptable to the predefined operator
+     1>Done Building Project "C:\Users\Thomas\Cloud\ROB_E14\Code\graph\graph\graph.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.53
