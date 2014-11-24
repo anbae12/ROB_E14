@@ -1,35 +1,35 @@
 //
-//  BrushFireAlgorithm.h
-//  Brushfire
+//  findPoints.h
 //
 //  Created by Anders Launer Bæk on 29/09/14.
 //
 //
 
-#ifndef __Brushfire__BrushFireAlgorithm__
-#define __Brushfire__BrushFireAlgorithm__
+#ifndef _findPoints_h
+#define _findPoints_h
 
 #include "Image.hpp"
+#include <queue>
+struct coordinates{
+    coordinates() : X(), Y(), Z() {}
+    coordinates(double X, double Y, int Z)
+    : X(X), Y(Y) , Z(Z) {}
+    double X;
+    double Y;
+    int Z;
+};
 
-class brushFireAlgorithm{
+class findpoints{
+    typedef std::queue<coordinates> queueOfPoints;
 public:
-    bool compare(double, double);
-    void BrushFireAlgorithm(rw::sensor::Image*, int, int const, int const);
-
+    findpoints();
+    void findP(rw::sensor::Image*, int, int const, int const);
+//    queueOfPoints queue;
 protected:
-    int freeSpace = 255;
-    int robotPathMoved = 125;
-    int obstacleImage = 0;
-    int obstacleBrushFire = 1;
-    int untouchedByFire = -1;
-    double lastBrushFireNumber = 1;
-    bool whileState;
-    
-    
-    
-    int stopstop = 10;
-
+    int const freeSpace = 255;
+    int const obstacleImage = 0;
+    int const pointColor = 225;
 private:
 };
 
-#endif /* defined(__Brushfire__BrushFireAlgorithm__) */
+#endif /* defined(_findPoints_h) */
