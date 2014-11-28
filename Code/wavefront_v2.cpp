@@ -80,7 +80,7 @@ int main() {
 				}
 			} else if (wavefront[y][x] != 1) {
 				wavefront[y][x] = 0;
-			}
+            }
 
 	wavefront[goal1.getY()][goal1.getX()] = 2; // Label the goal with a two.
 	wavefront[goal2.getY()][goal2.getX()] = 2; // Label the goal with a two.
