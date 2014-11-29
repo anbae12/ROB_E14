@@ -35,9 +35,9 @@ int main (){
     grete.push_back(paul(77, 36, 87, 43));
     grete.push_back(paul(89, 36, 94, 43));
     grete.push_back(paul(77, 32, 87, 34));
-    grete.push_back(paul(77, 5, 87, 30));
     grete.push_back(paul(89, 5, 94, 30));
-    grete.push_back(paul(43, 5, 74, 30));
+    grete.push_back(paul(77, 5, 87, 30));
+    grete.push_back(paul(43, 5, 75, 30));
 
     for (vector<paul>::iterator vertex = grete.begin(); vertex != grete.end(); vertex++) {
         test.addVertex(vertex->X, vertex->Y, vertex->Xx, vertex->Yy);

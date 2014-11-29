@@ -16,14 +16,18 @@ void pathPlanner::getPath()
     generatePath();
 
 
-    //cout << vertices[22].path;
+    while (!path.empty()) {
+        cout << "x: " << vertices[path.front()].top.x << " y: " << vertices[path.front()].top.y << endl;
+        path.pop();
+    }
 
-    unsigned int currentVertex = 22;
+    //cout << vertices[2].dist;
+
+   /*unsigned int currentVertex = 23;
     while (vertices[currentVertex].dist != 0) {
         cout << "x: " << vertices[currentVertex].top.x << " y: " << vertices[currentVertex].top.y << endl;
         currentVertex = vertices[currentVertex].path;
-    }
-
+    }*/
 
    /* for (vertices_t::iterator vertex_it = vertices.begin(); vertex_it != vertices.end(); vertex_it++) {
         cout << "x: " << vertex_it->top.x << " y: " << vertex_it->top.y << endl;
@@ -52,6 +56,11 @@ void pathPlanner::generatePath()
     while (!q.empty()) {
         currentVertex = q.front();
         q.pop();
+
+        path.push(currentVertex);
+
+        if (vertices[currentVertex].adj.size() == 1)
+            path.push(vertices[currentVertex].path);
 
         for (list<unsigned int>::iterator ajd_it = vertices[currentVertex].adj.begin(); ajd_it != vertices[currentVertex].adj.end(); ajd_it++) {
             if (vertices[*ajd_it].dist == infinityCost)
