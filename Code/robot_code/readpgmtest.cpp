@@ -2,6 +2,7 @@
 #include "Image.hpp"
 #include "PPMLoader.hpp"
 #include "robot.h"
+#include "findPoints"
 
 #define FALSE	0
 #define TRUE	1
@@ -41,6 +42,13 @@ int main(int argc, char** argv) {
     //test.print_wavefront_array();
     test.save_wavefront_to_map();
     //test.return_from_wavefront();
+    
+    findPoints fp;
+    fp.findDiagonals(img,channel);
+    
+    
+    
+    
     
     cout << "last location x: " << test.get_current_x() << " y: " << test.get_current_y() << endl;
     cout << "number of steps: " << test.get_walked_pixels() << endl;
