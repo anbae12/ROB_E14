@@ -20,7 +20,8 @@ class pathPlanner
         void addVertex(unsigned int topX, unsigned int topY, unsigned int bottomX, unsigned int bottomY);
         void getPath();
     private:
-        unsigned int infinityCost = numeric_limits<unsigned int>::max();
+        const static unsigned int infinityCost = numeric_limits<unsigned int>::max();
+
         struct coord {
             //coord(unsigned int x, unsigned int y) : x(x), y(y){};
             unsigned int x = 0, y = 0;
@@ -29,7 +30,8 @@ class pathPlanner
         struct vertex {
             list<unsigned int> adj;
             unsigned int dist;
-            unsigned int path;
+            unsigned int pathGrid[24];
+            unsigned int identifier = 0;
 
             coord top, bottom;
             void setCoord(unsigned int topX, unsigned int topY, unsigned int bottomX, unsigned int bottomY) {
@@ -38,14 +40,20 @@ class pathPlanner
                 bottom.x = bottomX;
                 bottom.y = bottomY;
             }
+
+            vertex() {
+                for (unsigned int i = 0; i < 24; i++)
+                    pathGrid[i] = infinityCost;
+            }
         };
 
         typedef vector<vertex> vertices_t;
         vertices_t vertices;
 
-        queue<unsigned int> path;
+        list<unsigned int> path;
 
         void createEdges();
+        void createPathGrids();
         void generatePath();
 };
 

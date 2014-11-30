@@ -31,7 +31,7 @@ int main (){
     grete.push_back(paul(71, 56, 75, 94));
     grete.push_back(paul(77, 56, 87, 94));
     grete.push_back(paul(89, 56, 94, 94));
-    grete.push_back(paul(71, 36, 74, 43));
+    grete.push_back(paul(71, 36, 75, 43));
     grete.push_back(paul(77, 36, 87, 43));
     grete.push_back(paul(89, 36, 94, 43));
     grete.push_back(paul(77, 32, 87, 34));
