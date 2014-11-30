@@ -11,16 +11,10 @@ pathPlanner::~pathPlanner()
     //dtor
 }
 
-void pathPlanner::getPath()
-{
-    
-   
+void pathPlanner::getPath(){
     createEdges();
-    std::cout<<"test8"<<std::endl;
     createPathGrids();
-    std::cout<<"test9"<<std::endl;
     generatePath();
-    std::cout<<"test10"<<std::endl;
     while (!path.empty()) {
         cout << "x: " << vertices[path.front()].top.x << " y: " << vertices[path.front()].top.y << endl;
         path.pop_front();

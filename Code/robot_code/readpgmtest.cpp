@@ -2,7 +2,7 @@
 #include "Image.hpp"
 #include "PPMLoader.hpp"
 #include "robot.h"
-#include "findPoints"
+#include "pathPlanner.h"
 
 #define FALSE	0
 #define TRUE	1
@@ -14,49 +14,42 @@ using namespace rw::loaders;
 void cover_vertex(Image *img, unsigned int vertex_x_value, unsigned int vertex_y_value);
 
 int main(int argc, char** argv) {
-    std::string filename = "test.pgm";
+    std::string filename= "/Users/Anders/Documents/test.pgm";
     
     std::cout << "loading image..." << std::endl;
     Image* img = PPMLoader::load(filename);
     
     cout << "H:" << img->getHeight() << " W: " << img->getWidth() << endl;
     
-    cup_robot test(10, 10, 4, img);
-    
-    // place a cup at the location
-    //test.color_pixel(43, 14, 150);
-    //test.color_pixel(45, 10, 150);
-    
-    //test.collect_cup(55, 13);
-    
-    cout << "x: " << test.get_current_x() << " y: " << test.get_current_y() << endl;
-    //test.cover_vertex(110,22);
-    //test.cup_scanner();
+    cup_robot test(3,3, 4, img);
     
     //cout << "x: " << test.get_current_x() << " y: " << test.get_current_y() << endl;
-    //cout << "number of steps: " << test.get_walked_pixels() << endl;
-    //cout << "cups collected: " << test.get_total_number_of_cups() << endl;
     
-    test.make_wavefront(90, 17);
+    
+    test.make_wavefront(111, 42);
     //test.follow_wavefront();
     //test.print_wavefront_array();
     test.save_wavefront_to_map();
     //test.return_from_wavefront();
+    pathPlanner ppp;
     
-    findPoints fp;
-    fp.findDiagonals(img,channel);
-    
-    
+    test.findDiagonals();
     
     
     
-    cout << "last location x: " << test.get_current_x() << " y: " << test.get_current_y() << endl;
-    cout << "number of steps: " << test.get_walked_pixels() << endl;
+    for (vector<coordinatesPair>::iterator vertex = test.queuePair.begin(); vertex != test.queuePair.end(); vertex++) {
+        std::cout<<vertex->x<<"," <<vertex->y<<" ; "<< vertex->Xx<<","<< vertex->Yy<<std::endl;
+        ppp.addVertex(vertex->x, vertex->y, vertex->Xx, vertex->Yy);
+    }
+    ppp.getPath();
     
-    std::cout << "saving image..." << std::endl;
+    // cout << "last location x: " << test.get_current_x() << " y: " << test.get_current_y() << endl;
+    // cout << "number of steps: " << test.get_walked_pixels() << endl;
+    
+    std::cout << "\nsaving image..." << std::endl;
     // save image
     img->saveAsPGM("testout.pgm");
-        
+    
     // cleanup
     delete img;
 }
