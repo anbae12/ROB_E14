@@ -3,9 +3,17 @@
 \textit{The Dean feels that it is not economically justified to by a robot system for 80.000 euro just to collect cups. Hence, it is interesting to have the robot do a second task, namely washing of the floors. Therefore calculate a coverage path that covers most of the floor in the map. Again the robot must start and end at the offloading stations.Again, you are free to choose algorithm and you should document the choice, the distance in kilometres that the robot moves and how long it takes to compute the coverage path.}
 
 \subsection{Funktioner}
+\todo[inline]{Noget kort omkring de forskellige funktioner vi har implementeret.}
 
-\subsubsection{Detektering af noder}
+\subsubsection{Firkantopdeling og output af diagonalsæt}
+Efter Wave-Front Planner algoritmen har kørt skal bygningens rum opdeles i firekanter og returnerer den øvre ventre koordinat og den nedre højre koordinat i en struct \emph{coordinatesPair()}. Denne funktion er derfor bestående af to trin, i det første trin opdeles bygningen i firkanter og herefter findes diagonalsættet for hver firkant.\\
+Til dannelsen af firkanter løbes hver pixel igennem af en dobbelt \emph{For Loops}, hvor hver pixel får tjekkes dens otte omkring liggende pixels, \emph{findPone()}. Tjekket af de otte omkring liggende pixels er lavet vha. simple \emph{IF Conditions}. Hvis der er match med én af de otte betingelser (P\(_{1-8}\) i figur \ref{fig:principotte}), så pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()}, på en køen \emph{queue} og pixel-værdien sættes til \emph{pointColor}.\\
+Herefter udvides hvert koordinat som findes på \emph{queue} i fire retninger; nord, syd, øst og vest, indtil enten en pixel-værdi med \emph{obstacle} eller \emph{pointColor} rammes. For hver iteration opdateres hver pixel-værdi til \emph{rectangularColor}. Dette foretages for hvert koordinat på \emph{queue}.\\
 
+I andet step laves det samme tjek, hvor de otte omkring liggende pixel-værdier tjekkes, \emph{findPtwo()}. Idet billedet er opdelt i firekanter skal der kun tjekkes for tre scenarier, P\(_{1, 3, 4}\) i figur \ref{fig:principotte}. Ligeledes hvis der er match, pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()},\\
+Herefter løbes køen igennem og tjekker om scenariet P\(_{1}\) ellers foretages et \emph{pop()}. For hvert koordinat med scenariet P\(_{1}\) tjekkes om dens nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres y-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet tjekkes om nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres x-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet, er det ønsket koordinatsæt fundet og pushes på en vector med en struct \emph{coordinatesPair()}.\\
+
+Implementeringen kan ses i appendix \ref{app:firkant}. \todo{Komplexitet??}
 
 \subsubsection{Dannelse af grafer}
 

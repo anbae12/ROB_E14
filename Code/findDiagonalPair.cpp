@@ -135,13 +135,6 @@ void findPtwo(rw::sensor::Image* img, int channel, int const imageWidth, int con
                 queue.push(coordinates(j,k,1));
                 img->setPixel8U(j,k,pointColor);
             }
-            // 2
-            else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                    img->getPixelValuei( j, k-1, channel ) == rectangularColor &&
-                    img->getPixelValuei( j+1, k, channel ) == rectangularColor) {
-                queue.push(coordinates(j,k,2));
-                img->setPixel8U(j,k,pointColor);
-            }
             // 3
             else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
                     img->getPixelValuei( j, k+1, channel ) == rectangularColor &&
