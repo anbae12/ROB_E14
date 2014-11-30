@@ -12,8 +12,8 @@ Herefter udvides hvert koordinat som findes på \emph{queue} i fire retninger; n
 
 I andet step laves det samme tjek, hvor de otte omkring liggende pixel-værdier tjekkes, \emph{findPtwo()}. Idet billedet er opdelt i firekanter skal der kun tjekkes for tre scenarier, P\(_{1, 3, 4}\) i figur \ref{fig:principotte}. Ligeledes hvis der er match, pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()},\\
 Herefter løbes køen igennem og tjekker om scenariet P\(_{1}\) ellers foretages et \emph{pop()}. For hvert koordinat med scenariet P\(_{1}\) tjekkes om dens nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres y-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet tjekkes om nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres x-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet, er det ønsket koordinatsæt fundet og pushes på en vector med en struct \emph{coordinatesPair()}.\\
-
-Implementeringen kan ses i appendix \ref{app:firkant}. \todo{Komplexitet??}
+\todo[inline]{Komplexitet??}
+Implementeringen kan ses i appendix \ref{app:firkant}. 
 
 \subsubsection{Dannelse af grafer}
 
