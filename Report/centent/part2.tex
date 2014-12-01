@@ -1,6 +1,7 @@
 \section{Coverage}
 \label{sec:cov}
-\textit{The Dean feels that it is not economically justified to by a robot system for 80.000 euro just to collect cups. Hence, it is interesting to have the robot do a second task, namely washing of the floors. Therefore calculate a coverage path that covers most of the floor in the map. Again the robot must start and end at the offloading stations.Again, you are free to choose algorithm and you should document the choice, the distance in kilometres that the robot moves and how long it takes to compute the coverage path.}
+\textit{The Dean feels that it is not economically justified to by a robot system for 80.000 euro just to collect cups. Hence, it is interesting to have the robot do a second task, namely washing of the floors. Therefore calculate a coverage path that covers most of the floor in the map. Again the robot must start and end at the offloading stations.
+Again, you are free to choose algorithm and you should document the choice, the distance in kilometres that the robot moves and how long it takes to compute the coverage path.}
 
 \subsection{Funktioner}
 \todo[inline]{Noget kort omkring de forskellige funktioner vi har implementeret.}
@@ -16,5 +17,33 @@ Herefter løbes køen igennem og tjekker om scenariet P\(_{1}\) ellers foretages
 Implementeringen kan ses i appendix \ref{app:firkant}. 
 
 \subsubsection{Dannelse af grafer}
+For at navigere robotten rundt i bygningen blev det valgt at associere hvert \texttt{coordinatesPair} med en vertex og konstruere en graf på baggrund af disse. Grafen oprettes i fire trin:
+\begin{itemize}
+	\item \texttt{addVertex() :} Først oprettes hver enkelt vertex og indsættes i en liste, \texttt{vertices[n]} således at de kan tilgås ved en simpel indeksering.
+	\item \texttt{createEdges() :} Som navnet antyder sørger denne funktion for at oprette edges imellem alle tilstødene vertices. Hvorvidt en vertex grænser op mod en anden afgøres ved at undersøge forholdene imellem deres koordinater. 
+\begin{figure}[h!]
+	\label{fig:coordRelation}
+	%\includegraphics[scale=1]{coordRelation}
+	\caption{Eksempel på afgørelse om naboskab for vertex $V_0$}
+\end{figure}
+På figur \ref{fig:coordRelation} ses de fire mulige situationer der kan opstå ved oprettelse af edges til naboliggende vertices. Det gælder at: \\
+\scriptsize\emph{(Læs: $V_1$ er nabo til $V_0$ hvis og kun hvis koordinatet $(X_{01}+1,Y_{00})$ eksisterer som top koordinat i den n'de vertex i listen vertices.)}
+\normalsize	 	 
+	 \begin{align*}
+	 V_1\parallel V_0 & \equiv(X_{01}+1,Y_{00})\in v[n].\text{top}(x,y)	 \\
+	 V_2\parallel V_0 & \equiv(X_{01},Y_{00}-1)\in v[n].\text{bottom}(x,y)\\
+	 V_3\parallel V_0 & \equiv(X_{00}-1,Y_{01})\in v[n].\text{bottom}(x,y)\\
+	 V_4\parallel V_0 & \equiv(X_{00},Y_{01}-1)\in v[n].\text{top}(x,y)\\
+	 \end{align*}
+Den faktiske implementering af dette kan ses i appendix \ref{app:createEdges}.
+	 \item \texttt{createPathGrid() :} Denne funktion opretter en liste, \texttt{pathGrid} over lokalområdet for hver vertex. På denne måde får hver enkelt vertex kendskab til alle vertices indenfor en radius af tre vertices. Worst-case scenariet kan ses i figur \ref{fig:pathGrid}. Denne information er nødvendig for at den path der oprettes overholder den 4-point-connectivity robotton kræver. 
+\begin{figure}[h!]
+	\label{fig:pathGrid}
+	%\includegraphics[scale=1]{pathGrid}
+	\caption{Worst-case eksempel på oprettelse af pathGrid}
+\end{figure}
+	 \item \texttt{generatePath() :} Slutteligt oprettes den path robotten skal følge for at besøge alle vertices. Til dette anvendes en modificeret shortest path first algoritme som set i appendix \ref{app:generatePath}. En vertex pushes på en kø og algoritmen initialiseres. Hver vertex pusher sine naboer på køen og bliver føjet til path. Det undersøges om den nuværende vertex og det forreste element i køen er naboer, hvis dette er tilfældet fortsætter algoritmen. Hvis ikke, findes ruten fra den nuværende vertex til det forreste element i køen ved hjælp af \texttt{pathGrid} fundet i det sidste step. Når ruten er fundet føjes den til path. 
+\end{itemize}
+Det er værd at nævne at problemet der skal løses her er et velkendt problem kaldet \textit{"Traveling Salesman Problem"}[TSP]. Formuleringen af dette problem er: Givet en række byer, hvad er den kortest mulige rute en sælger skal følge for at nå til alle byer. TSP er NP-Hard hvilket betyder at der ikke eksisterer en "pæn" løsning på problemet. 
 
 \subsubsection{Dækningssti af gulvareal}
