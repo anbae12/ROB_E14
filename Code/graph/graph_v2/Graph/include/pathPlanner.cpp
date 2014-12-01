@@ -15,6 +15,8 @@ void pathPlanner::getPath(){
     createEdges();
     createPathGrids();
     generatePath();
+    
+    cout << vertices.size()<<endl;
     while (!path.empty()) {
         cout << "x: " << vertices[path.front()].top.x << " y: " << vertices[path.front()].top.y << endl;
         path.pop_front();
@@ -97,30 +99,30 @@ void pathPlanner::createEdges()
 
     //Run throug every vertex to find it's edges
     for (vertices_t::iterator vertex_it = vertices.begin(); vertex_it != vertices.end(); vertex_it++){
-        vertexIndex = distance(vertices.begin(), vertex_it); // Get the vertex index/number
+        vertexIndex = (unsigned int)distance(vertices.begin(), vertex_it); // Get the vertex index/number
         vertex_it->identifier = vertexIndex;
         //Run throug every vertex again to see if it is a neihghbor
         for (vertices_t::iterator neighbor_it = vertices.begin(); neighbor_it != vertices.end(); neighbor_it++) {
-            neighborIndex = distance(vertices.begin(), neighbor_it); // Get the neighbor index/number
+            neighborIndex = (unsigned int)distance(vertices.begin(), neighbor_it); // Get the neighbor index/number
             //Only check if it is not itself
             if (neighborIndex != vertexIndex) {
                 //Check right and add egde and cost
-                if (vertex_it->bottom.x + 2 == neighbor_it->top.x && vertex_it->top.y == neighbor_it->top.y)
+                if (vertex_it->bottom.x == neighbor_it->top.x && vertex_it->top.y == neighbor_it->top.y)
                     vertex_it->adj.push_back(neighborIndex);
                     //adjMatrix[vertexIndex][neighborIndex] = neighbor->first.x/2 - vertex->first.x/2;
 
                 //Check left and add egde and cost
-                if (vertex_it->top.x - 2 == neighbor_it->bottom.x && vertex_it->bottom.y == neighbor_it->bottom.y)
+                if (vertex_it->top.x == neighbor_it->bottom.x && vertex_it->bottom.y == neighbor_it->bottom.y)
                     vertex_it->adj.push_back(neighborIndex);
                     //adjMatrix[vertexIndex][neighborIndex] = vertex->first.x/2 - neighbor->first.x/2;
 
                 //Check top and add egde and cost
-                if (vertex_it->bottom.x == neighbor_it->bottom.x && vertex_it->top.y - 2 == neighbor_it->bottom.y)
+                if (vertex_it->bottom.x == neighbor_it->bottom.x && vertex_it->top.y == neighbor_it->bottom.y)
                     vertex_it->adj.push_back(neighborIndex);
                     //adjMatrix[vertexIndex][neighborIndex] = vertex->first.y/2 - neighbor->first.y/2;
 
                 //Check bottom and add egde and cost
-                if (vertex_it->top.x == neighbor_it->top.x && vertex_it->bottom.y + 2 == neighbor_it->top.y)
+                if (vertex_it->top.x == neighbor_it->top.x && vertex_it->bottom.y == neighbor_it->top.y)
                     vertex_it->adj.push_back(neighborIndex);
                     //adjMatrix[vertexIndex][neighborIndex] = neighbor->first.y/2 - vertex->first.y/2;
              }
