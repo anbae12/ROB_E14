@@ -40,23 +40,28 @@ private:
     int const pointColor = 225;
     int const rectangularColor = 111;
     int tempJ, tempK, j, k;
-    int channel;
+    int const channel=0;
     
     findpoints();
-    void findPone(rw::sensor::Image*);
-    void findPtwo(rw::sensor::Image*);
-    void preparePicture(rw::sensor::Image*);
-    void stageOne(rw::sensor::Image*);
-    void stageTwo(rw::sensor::Image*);
-    void printPair();
+    void findPone();
+    void findPtwo();
+    void preparePicture();
+    void stageOne();
+    void stageTwo();
+    void createArray();
     
+    typedef std::vector<std::vector<int> >  array;
+    array array3D;
+    //typedef std::vector<std::vector<int> >  array1;
+    //array1 arrayOfCoord;
     typedef std::queue<coordinates> queueOfPoints;
     queueOfPoints queue;
     
+    
 public:
     findpoints(Image *img);
-
-    void findDiagonals(rw::sensor::Image*, int);
+    
+    void findDiagonals();
     typedef std::vector<coordinatesPair> queueOfPoints2;
     queueOfPoints2 queuePair;
     

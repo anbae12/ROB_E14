@@ -14,128 +14,126 @@ findpoints::findpoints(Image *img): wavefront(img){
     map=img;
 }
 
-void findpoints::findPone(rw::sensor::Image* img){
+void findpoints::createArray(){
+    array3D.resize(map->getWidth());
+    for (int i = 0; i < map->getWidth(); ++i) {
+        array3D[i].resize(map->getHeight());
+    }
+    
+    for (int j=0; j<map->getWidth(); j++) {
+        for (int k=0; k<map->getHeight(); k++) {
+            array3D[j][k]=map->getPixelValuei(j, k, channel);
+        }
+    }
+    
+    array3D[62][51]=freeSpace;
+    array3D[63][51]=freeSpace;
+    array3D[64][51]=freeSpace;
+    array3D[65][51]=freeSpace;
+    array3D[66][51]=freeSpace;
+    array3D[67][51]=freeSpace;
+    array3D[68][51]=freeSpace;
+    array3D[69][51]=freeSpace;
+    array3D[70][51]=freeSpace;
+    array3D[71][51]=freeSpace;
+    array3D[72][51]=freeSpace;
+    array3D[73][51]=freeSpace;
+    array3D[74][51]=freeSpace;
+    
+}
+
+void findpoints::findPone(){
     // loop vertical through picture
-    for (int j=1; j<img->getWidth()-1; j++) {
-        for (int k=1; k<img->getHeight()-1; k++) {
+    
+    for (int j=1; j<map->getWidth()-1; j++) {
+        for (int k=1; k<map->getHeight()-1; k++) {
             if (wavefront_mask[k][j]>=2) {
                 // 1
-                if (img->getPixelValuei( j, k, channel ) == freeSpace &&
-                    img->getPixelValuei( j, k-1, channel ) == obstacleImage &&
-                    img->getPixelValuei( j-1, k, channel ) == obstacleImage) {
+                if (array3D[j][k] == freeSpace &&
+                    array3D[j][k-1] == obstacleImage &&
+                    array3D[j-1][k] == obstacleImage) {
                     queue.push(coordinates(j,k,1));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 2
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k-1, channel ) == obstacleImage &&
-                        img->getPixelValuei( j+1, k, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j][k-1] == obstacleImage &&
+                        array3D[j+1][k] == obstacleImage) {
                     queue.push(coordinates(j,k,2));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 3
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == obstacleImage &&
-                        img->getPixelValuei( j-1, k, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j][k+1] == obstacleImage &&
+                        array3D[j-1][k] == obstacleImage) {
                     queue.push(coordinates(j,k,3));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 4
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == obstacleImage &&
-                        img->getPixelValuei( j+1, k, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j][k+1] == obstacleImage &&
+                        array3D[j+1][k] == obstacleImage) {
                     queue.push(coordinates(j,k,4));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 5
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k-1, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j][k-1] == freeSpace &&
+                        array3D[j][k+1] == freeSpace &&
+                        array3D[j+1][k] == freeSpace &&
+                        array3D[j-1][k] == freeSpace &&
+                        array3D[j-1][k-1] == freeSpace &&
+                        array3D[j-1][k+1] == freeSpace &&
+                        array3D[j+1][k+1] == freeSpace &&
+                        array3D[j+1][k-1] == obstacleImage) {
                     queue.push(coordinates(j,k,5));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 6
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k-1, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j][k-1] == freeSpace &&
+                        array3D[j][k+1] == freeSpace &&
+                        array3D[j+1][k] == freeSpace &&
+                        array3D[j-1][k] == freeSpace &&
+                        array3D[j+1][k-1] == freeSpace &&
+                        array3D[j+1][k+1] == freeSpace &&
+                        array3D[j-1][k+1] == freeSpace &&
+                        array3D[j-1][k-1] == obstacleImage) {
                     queue.push(coordinates(j,k,6));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 7
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k+1, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        //array3D[j][k-1] == freeSpace &&
+                        array3D[j][k+1] == freeSpace &&
+                        array3D[j+1][k] == freeSpace &&
+                        array3D[j-1][k] == freeSpace &&
+                        array3D[j-1][k-1] == freeSpace &&
+                        array3D[j-1][k+1] == freeSpace &&
+                        array3D[j+1][k-1] == freeSpace &&
+                        array3D[j+1][k+1] == obstacleImage) {
                     queue.push(coordinates(j,k,7));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
                 // 8
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j+1, k+1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k-1, channel ) == freeSpace &&
-                        img->getPixelValuei( j-1, k+1, channel ) == obstacleImage) {
+                else if(array3D[j][k] == freeSpace &&
+                        //array3D[j][k-1] == freeSpace &&
+                        array3D[j][k+1] == freeSpace &&
+                        array3D[j+1][k] == freeSpace &&
+                        array3D[j-1][k] == freeSpace &&
+                        array3D[j+1][k-1] == freeSpace &&
+                        array3D[j+1][k+1] == freeSpace &&
+                        array3D[j-1][k-1] == freeSpace &&
+                        array3D[j-1][k+1] == obstacleImage) {
                     queue.push(coordinates(j,k,8));
-                    img->setPixel8U(j,k,pointColor);
+                    array3D[j][k]=pointColor;
                 }
             }
             
         }
     }
 }
-
-void findpoints::findPtwo(rw::sensor::Image* img){
-    // loop vertical through picture
-    for (int j=1; j<img->getWidth()-1; j++) {
-        for (int k=1; k<img->getHeight()-1; k++) {
-            if (wavefront_mask[k][j]>=2) {
-                // 1
-                if (img->getPixelValuei( j, k, channel ) == freeSpace &&
-                    img->getPixelValuei( j, k-1, channel ) == rectangularColor &&
-                    img->getPixelValuei( j-1, k, channel ) == rectangularColor) {
-                    queue.push(coordinates(j,k,1));
-                    img->setPixel8U(j,k,pointColor);
-                }
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == rectangularColor &&
-                        img->getPixelValuei( j-1, k, channel ) == rectangularColor) {
-                    queue.push(coordinates(j,k,3));
-                    img->setPixel8U(j,k,pointColor);
-                }
-                // 4
-                else if(img->getPixelValuei( j, k, channel ) == freeSpace &&
-                        img->getPixelValuei( j, k+1, channel ) == rectangularColor &&
-                        img->getPixelValuei( j+1, k, channel ) == rectangularColor) {
-                    queue.push(coordinates(j,k,4));
-                    img->setPixel8U(j,k,pointColor);
-                }
-            }
-        }
-    }
-}
-
-void findpoints::stageOne(rw::sensor::Image* img){
+void findpoints::stageOne(){
     while (!queue.empty()) {
         j=queue.front().x;
         k=queue.front().y;
@@ -145,127 +143,216 @@ void findpoints::stageOne(rw::sensor::Image* img){
         bool state=true;
         while (state) {
             ++tempK;
-            if (img->getPixelValuei(tempJ, tempK, channel) == obstacleImage) {
+            if (array3D[tempJ][tempK] == obstacleImage) {
                 state=false;
                 --tempK;
             }
             
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
+            if (array3D[tempJ][tempK] == pointColor) {
                 state=false;
                 --tempK;
             }
-            img->setPixel8U(tempJ , tempK , rectangularColor);
+            array3D[tempJ][tempK]=rectangularColor;
         }
         state=true;
         tempJ=j;
         tempK=k;
         while (state) {
             --tempK;
-            if (img->getPixelValuei(tempJ, tempK, channel) == obstacleImage) {
+            if (array3D[tempJ][tempK] == obstacleImage) {
                 state=false;
                 ++tempK;
             }
             
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
+            if (array3D[tempJ][tempK] == pointColor) {
                 state=false;
                 ++tempK;
             }
-            img->setPixel8U(tempJ , tempK , rectangularColor);
+            array3D[tempJ][tempK]=rectangularColor;
         }
         state=true;
         tempJ=j;
         tempK=k;
         while (state) {
             ++tempJ;
-            if (img->getPixelValuei(tempJ, tempK, channel) == obstacleImage) {
+            if (array3D[tempJ][tempK] == obstacleImage) {
                 state=false;
                 --tempJ;
             }
             
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
+            if (array3D[tempJ][tempK] == pointColor) {
                 state=false;
                 --tempJ;
             }
-            img->setPixel8U(tempJ , tempK , rectangularColor);
+            array3D[tempJ][tempK]=rectangularColor;
         }
         state=true;
         tempJ=j;
         tempK=k;
         while (state) {
             --tempJ;
-            if (img->getPixelValuei(tempJ, tempK, channel) == obstacleImage) {
+            if (array3D[tempJ][tempK] == obstacleImage) {
                 state=false;
                 ++tempJ;
             }
             
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
+            if (array3D[tempJ][tempK] == pointColor) {
                 state=false;
                 ++tempJ;
             }
-            img->setPixel8U(tempJ , tempK , rectangularColor);
+            array3D[tempJ][tempK]=rectangularColor;
         }
         
-        img->setPixel8U(queue.front().x , queue.front().y , pointColor);
+        map->setPixel8U(queue.front().x , queue.front().y , pointColor);
         queue.pop();
     }
 }
-
-void findpoints::stageTwo(rw::sensor::Image* img){
-    while (!queue.empty()) {
-        double J=queue.front().x;
-        double K=queue.front().y;
-        double tempJ=queue.front().x;
-        double tempK=queue.front().y;
-        
-        if (queue.front().z==1){
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
+void findpoints::findPtwo(){
+    // loop vertical through picture
+    for (int j=1; j<map->getWidth()-1; j++) {
+        for (int k=1; k<map->getHeight()-1; k++) {
+            
+            
+            if (wavefront_mask[k][j]>=2) {
+                // 1
+                if (array3D[j][k] == freeSpace &&
+                    array3D[j][k-1] == rectangularColor &&
+                    array3D[j-1][k] == rectangularColor &&
+                    //array3D[j-1][k-1] == rectangularColor &&
+                    array3D[j+1][k] == freeSpace &&
+                    array3D[j+1][k+1] == freeSpace) {
+                    queue.push(coordinates(j,k,1));
+                    array3D[j][k]=pointColor;
+                }
                 
-            }else{
-                do ++tempK;
-                while (img->getPixelValuei(tempJ, tempK, channel) != pointColor);
+                // 9 left
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j+1][k] == freeSpace &&
+                        array3D[j-1][k] == rectangularColor &&
+                        array3D[j][k+1] == rectangularColor &&
+                        array3D[j][k-1] == rectangularColor) {
+                    queue.push(coordinates(j,k,2));
+                    //array3D[j][k]=obstacleImage;
+                }
+                
+                
+                // 10 bottom
+                else if(array3D[j][k] == freeSpace &&
+                        array3D[j-1][k] == rectangularColor &&
+                        array3D[j+1][k] == rectangularColor &&
+                        array3D[j][k-1] == rectangularColor &&
+                        array3D[j][k+1] == freeSpace) {
+                    queue.push(coordinates(j,k,3));
+                    // array3D[j][k]=obstacleImage;
+                }
+                
+                // 11 center
+                if(array3D[j][k] == freeSpace &&
+                   array3D[j-1][k] == rectangularColor &&
+                   array3D[j+1][k] == rectangularColor &&
+                   
+                   array3D[j][k-1] == rectangularColor &&
+                   array3D[j][k+1] == rectangularColor &&
+                   
+                   array3D[j-1][k-1] == rectangularColor &&
+                   array3D[j+1][k+1] == rectangularColor &&
+                   
+                   array3D[j-1][k+1] == rectangularColor &&
+                   array3D[j+1][k+1] == rectangularColor) {
+                    queue.push(coordinates(j,k,4));
+                    //array3D[j][k]=obstacleImage;
+                    std::cout<<"center"<<std::endl;
+                }
+                
+            }
+        }
+    }
+}
+
+
+
+void findpoints::stageTwo(){
+    while (!queue.empty()) {
+        int J=queue.front().x;
+        int K=queue.front().y;
+        int tempJ=queue.front().x;
+        int tempK=queue.front().y;
+        
+        if (queue.front().z==1) {
+            while (array3D[tempJ][tempK+1]!=rectangularColor){
+                ++tempK;
             }
             
-            if (img->getPixelValuei(tempJ, tempK, channel) == pointColor) {
-                
-            }else{
-                do ++tempJ;
-                while (img->getPixelValuei(tempJ, tempK, channel) != pointColor);
+            while (array3D[tempJ+1][tempK]!=rectangularColor){
+                ++tempJ;
             }
-            queuePair.push_back(coordinatesPair(J-1,K-1,tempJ+1,tempK+1));
+            queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
+            //array3D[J][K]=obstacleImage;
+            //array3D[tempJ][tempK]=obstacleImage;
+            //std::cout<<J<<","<<K<<" ; "<<tempJ<<","<<tempK<<std::endl;
             queue.pop();
+        }
+        else if(queue.front().z==2){
+            while (array3D[tempJ+1][tempK]!=rectangularColor){
+                ++tempJ;
+            }
+            queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
+            //array3D[J][K]=obstacleImage;
+            //array3D[tempJ][tempK]=obstacleImage;
+            //std::cout<<J<<","<<K<<" ; "<<tempJ<<","<<tempK<<std::endl;
             queue.pop();
-        }else
+        }
+        else if(queue.front().z==3){
+            while (array3D[tempJ][tempK+1]!=rectangularColor){
+                ++tempK;
+            }
+            queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
+            //array3D[J][K]=obstacleImage;
+            //array3D[tempJ][tempK]=obstacleImage;
+            //std::cout<<J<<","<<K<<" ; "<<tempJ<<","<<tempK<<std::endl;
             queue.pop();
+        }
+        else if(queue.front().z==4){
+            queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
+            array3D[J][K]=obstacleImage;
+            //array3D[tempJ][tempK]=obstacleImage;
+            //std::cout<<J-1<<","<<K-1<<" ; "<<tempK+1<<","<<tempK+1<<std::endl;
+            queue.pop();
+        }
+        
+        
+        
+        
+        
     }
 }
 
-void findpoints::printPair(){
-    while (!queuePair.empty()) {
+
+void findpoints::preparePicture(){
+    for (int i=0; i<map->getWidth(); i++) {
+        array3D[i][0]=obstacleImage;
+        array3D[i][map->getHeight()-1]=obstacleImage;
+    }
+    for (int i=0; i<map->getHeight(); i++) {
+        array3D[0][i]=obstacleImage;
+        array3D[map->getWidth()-1][i]=obstacleImage;
+    }
+}
+
+void findpoints::findDiagonals(){
+    createArray();
+    preparePicture();
+    findPone();
+    stageOne();
+    findPtwo();
+    stageTwo();
     
-        std::cout<<queuePair.back().x<<","<<queuePair.back().y<<" ; "<<queuePair.back().Xx<<","<<queuePair.back().Yy<<std::endl;
-    queuePair.pop_back();
-    }
-}
-
-void findpoints::preparePicture(rw::sensor::Image* img){
-    for (int i=0; i<img->getWidth(); i++) {
-        img->setPixel8U(i , 0 , obstacleImage);
-        img->setPixel8U(i , img->getHeight()-1 , obstacleImage);
-    }
-    for (int i=0; i<img->getHeight(); i++) {
-        img->setPixel8U(0 , i , obstacleImage);
-        img->setPixel8U(img->getWidth()-1,i , obstacleImage);
-    }
-}
-
-void findpoints::findDiagonals(rw::sensor::Image* img, int chan){
-    channel=chan;
-    preparePicture(img);
-    findPone(img);
-    stageOne(img);
-    findPtwo(img);
-    stageTwo(img);
-    printPair();
     
+    std::cout<<queuePair.size()<<std::endl;
+    for (int k=0; k<map->getWidth() ; ++k) {
+        for (int j=0; j<map->getHeight() ; ++j) {
+            map->setPixel8U(k,j,array3D[k][j]);
+        }
+    }
 }
 

@@ -50,18 +50,19 @@ private:
     void stageTwo();
     void createArray();
     
-    //void printPair();
     typedef std::vector<std::vector<int> >  array;
-    typedef std::queue<coordinates> queueOfPoints;
     array array3D;
+    //typedef std::vector<std::vector<int> >  array1;
+    //array1 arrayOfCoord;
+    typedef std::queue<coordinates> queueOfPoints;
     queueOfPoints queue;
+    
     
 public:
     findpoints(Image *img);
     
     void findDiagonals();
     typedef std::vector<coordinatesPair> queueOfPoints2;
-    //typedef std::queue<coordinatesPair> queueOfPoints2;
     queueOfPoints2 queuePair;
     
     
