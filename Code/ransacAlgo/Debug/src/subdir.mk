@@ -5,18 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/Ransac.cpp \
-../src/Vector2D.cpp \
-../src/main.cpp 
+../src/main.cpp \
+../src/pixel.cpp 
 
 OBJS += \
 ./src/Ransac.o \
-./src/Vector2D.o \
-./src/main.o 
+./src/main.o \
+./src/pixel.o 
 
 CPP_DEPS += \
 ./src/Ransac.d \
-./src/Vector2D.d \
-./src/main.d 
+./src/main.d \
+./src/pixel.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
