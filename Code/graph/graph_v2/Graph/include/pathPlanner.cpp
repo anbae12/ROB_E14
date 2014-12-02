@@ -54,12 +54,13 @@ void pathPlanner::generatePath()
     //Start at vertex 0
     vertices[currentVertex].dist = 0;
     q.push(currentVertex);
-
+    
     while (!q.empty()) {
         currentVertex = q.front();
         q.pop();
-
+std::cout<<"q.front: "<<q.front()<<std::endl;
         if (!q.empty()) {
+           // std::cout<<"q.front: "<<q.front()<<std::endl;
             neighbor = 0;
             for (list<unsigned int>::iterator ajd_it = vertices[q.front()].adj.begin(); ajd_it != vertices[q.front()].adj.end(); ajd_it++)
                 if (q.front() == *ajd_it)
@@ -68,6 +69,7 @@ void pathPlanner::generatePath()
             if (!neighbor){
                 queuePathGrid.clear();
                 destinationVertex = q.front();
+                //std::cout<<"q.front: "<<q.front()<<std::endl;
                 while (destinationVertex != currentVertex) {
                     destinationVertex = vertices[currentVertex].pathGrid[destinationVertex];
                     queuePathGrid.push_back(destinationVertex);
