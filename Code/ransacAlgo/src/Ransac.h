@@ -14,6 +14,7 @@ typedef unsigned int uint;
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 
 class Ransac {
 public:
@@ -22,14 +23,15 @@ public:
 	void run();
 	void addPoint(uint x, uint y);
 private:
-	struct line {
-		float a = 0, b = 0;
-	};
+	struct line {float a = 0, b = 0;};
 
 	float calcDist(line line, pixel pixel);
-	line calcLine(uint x1, uint y1, uint x2, uint y2);
-	void printCoord(uint pos) { std::cout << "(" << points[pos].get_x() << "," << points[pos].get_y() << ")" << std::endl;}
+	line calcLine(pixel point1, pixel point2);
+	void printPoint(pixel point) { std::cout << "(" << point.get_x() << "," << point.get_y() << ")" << std::endl;}
+	void algo();
+
 	std::vector<pixel> points;
+	std::vector<line> lines;
 private:
 
 };

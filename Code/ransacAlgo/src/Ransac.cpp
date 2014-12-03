@@ -9,28 +9,67 @@
 
 void Ransac::run()
 {
-	printCoord(0);
-	printCoord(1);
+	//for (uint i = 0; i < points.size(); i++)
+	//	printPoint(points[i]);
+	algo();
+}
 
-	line temp = calcLine(points[0].get_x(), points[0].get_y(), points[1].get_x(), points[1].get_y());
+void Ransac::algo()
+{
+	uint minDist = 5, minInliers = 2, maxIterations = 10, iterations = 0;
+	std::vector<pixel> inliers;
+	pixel point1, point2;
+	line tempLine;
 
-	std::cout << "a: " << temp.a << std::endl;
-	std::cout << "b: " << temp.b << std::endl;
+	srand(time(NULL));
 
-	std::cout << "Dist: " << calcDist(temp, points[2]) << std::endl;
+	while(maxIterations > iterations || points.size() > minInliers)
+	{
+		iterations++;
+		point1 = points[rand() % points.size()];
+		point2 = points[rand() % points.size()];
+
+		tempLine = calcLine(point1, point2);
+
+		if (!isnanf(fabs(tempLine.a)))
+			for (uint i = 0; i < points.size(); i++)
+				if (minDist >= calcDist(tempLine, points[i]))
+					inliers.push_back(points[i]);
+
+		if (inliers.size() >= minInliers) {
+			//RecomputerLine
+			//update temp
+			//Store line in vector line
+			for (uint i = 0; i < inliers.size(); i++) {
+				printPoint(inliers[i]);
+				for (uint j = 0; j < points.size(); j++) {
+					if (inliers[i] == points[j])
+						points.erase(points.begin()+j);
+				}
+			}
+		}
+		inliers.clear();
+	}
 }
 
 float Ransac::calcDist(line line, pixel pixel)
 {
-	return fabs(line.a*(float)pixel.get_x()+ line.b - (float)pixel.get_y()) / sqrt(pow(line.a, (float)2)+1);
+	if (isinff(line.a))
+		return fabs(line.b - pixel.get_x());
+	else
+		return fabs(line.a*(float)pixel.get_x()+ line.b - (float)pixel.get_y()) / sqrt(pow(line.a, (float)2)+1);
 }
 
-Ransac::line Ransac::calcLine(uint x1, uint y1, uint x2, uint y2)
+Ransac::line Ransac::calcLine(pixel point1, pixel point2)
 {
 	line temp;
 
-	temp.a = ((float)y2-(float)y1)/((float)x2-(float)x1);
-	temp.b = (float)y1-temp.a*(float)x1;
+	temp.a = ((float)point2.get_y() - (float)point1.get_y())/((float)point2.get_x() - (float)point1.get_x());
+
+	if (isinff(temp.a))
+		temp.b = point1.get_x();
+	else
+		temp.b = (float)point1.get_y() - temp.a*(float)point1.get_x();
 
 	return temp;
 }
