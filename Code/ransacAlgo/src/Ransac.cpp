@@ -16,14 +16,14 @@ void Ransac::run()
 
 void Ransac::algo()
 {
-	uint minDist = 5, minInliers = 2, maxIterations = 10, iterations = 0;
+	uint maxDist = 2, minInliers = 2, maxIterations = 10, iterations = 0;
 	std::vector<pixel> inliers;
 	pixel point1, point2;
 	line tempLine;
 
 	srand(time(NULL));
 
-	while(maxIterations > iterations || points.size() > minInliers)
+	while(points.size() > minInliers || iterations > maxIterations)
 	{
 		iterations++;
 		point1 = points[rand() % points.size()];
@@ -31,24 +31,24 @@ void Ransac::algo()
 
 		tempLine = calcLine(point1, point2);
 
-		if (!isnanf(fabs(tempLine.a)))
+		std::cout << "a: " << tempLine.a << " b: " << tempLine.b << std::endl;
+
+		if (!isnanf(fabs(tempLine.a))) {
 			for (uint i = 0; i < points.size(); i++)
-				if (minDist >= calcDist(tempLine, points[i]))
+				if (maxDist >= calcDist(tempLine, points[i]))
 					inliers.push_back(points[i]);
 
-		if (inliers.size() >= minInliers) {
-			//RecomputerLine
-			//update temp
-			//Store line in vector line
-			for (uint i = 0; i < inliers.size(); i++) {
-				printPoint(inliers[i]);
-				for (uint j = 0; j < points.size(); j++) {
-					if (inliers[i] == points[j])
-						points.erase(points.begin()+j);
-				}
+			if (inliers.size() >= minInliers) {
+				//RecomputerLine
+				//update temp
+				//Store line in vector line
+				for (uint i = 0; i < inliers.size(); i++)
+					for (uint j = 0; j < points.size(); j++)
+						if (inliers[i] == points[j])
+							points.erase(points.begin()+j);
 			}
+			inliers.clear();
 		}
-		inliers.clear();
 	}
 }
 
