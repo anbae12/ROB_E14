@@ -4,10 +4,16 @@
 Again, you are free to choose algorithm and you should document the choice, the distance in kilometres that the robot moves and how long it takes to compute the coverage path.}
 
 \subsection{Funktioner}
-\todo[inline]{Noget kort omkring de forskellige funktioner vi har implementeret.}
+Coverage af gulvarealet foregår i fire trin:
+\begin{itemize}
+	\item Opdelingen af arealet i regioner.
+	\item Opret graf indeholdene alle regioner.
+	\item Planlæg rute igennem grafen således at robotten besøger alle regioner mindst én gang.
+	\item Lad robotten følge ruten fundet i foregående trin.
+\end{itemize}
 
 \subsubsection{Firkantopdeling og output af diagonalsæt}
-Efter Wave-Front Planner algoritmen har kørt skal bygningens rum opdeles i firekanter og returnerer den øvre ventre koordinat og den nedre højre koordinat i en struct \emph{coordinatesPair()}. Denne funktion er derfor bestående af to trin, i det første trin opdeles bygningen i firkanter og herefter findes diagonalsættet for hver firkant.\\
+Efter Wave-Front Planner algoritmen har kørt skal bygningens rum opdeles i firkanter og returnerer den øvre ventre koordinat og den nedre højre koordinat i en struct \emph{coordinatesPair()}. Denne funktion er derfor bestående af to trin, i det første trin opdeles bygningen i firkanter og herefter findes diagonalsættet for hver firkant.\\
 Til dannelsen af firkanter løbes hver pixel igennem af en dobbelt \emph{For Loops}, hvor hver pixel får tjekkes dens otte omkring liggende pixels, \emph{findPone()}. Tjekket af de otte omkring liggende pixels er lavet vha. simple \emph{IF Conditions}. Hvis der er match med én af de otte betingelser (P\(_{1-8}\) i figur \ref{fig:principotte}), så pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()}, på en køen \emph{queue} og pixel-værdien sættes til \emph{pointColor}.\\
 Herefter udvides hvert koordinat som findes på \emph{queue} i fire retninger; nord, syd, øst og vest, indtil enten en pixel-værdi med \emph{obstacle} eller \emph{pointColor} rammes. For hver iteration opdateres hver pixel-værdi til \emph{rectangularColor}. Dette foretages for hvert koordinat på \emph{queue}.\\
 
@@ -27,23 +33,18 @@ For at navigere robotten rundt i bygningen blev det valgt at associere hvert \te
 	\caption{Eksempel på afgørelse om naboskab for vertex $V_0$}
 \end{figure}
 På figur \ref{fig:coordRelation} ses de fire mulige situationer der kan opstå ved oprettelse af edges til naboliggende vertices. Det gælder at: \\
-\scriptsize\emph{(Læs: $V_1$ er nabo til $V_0$ hvis og kun hvis koordinatet $(X_{01}+1,Y_{00})$ eksisterer som top koordinat i den n'de vertex i listen vertices.)}
+\scriptsize\emph{(Læs: $V_1$ er nabo til $V_0$ hvis og kun hvis koordinatet $(X_{01},Y_{00})$ eksisterer som top koordinat i den n'de vertex i listen vertices.)}
 \normalsize	 	 
 	 \begin{align*}
-	 V_1\parallel V_0 & \equiv(X_{01}+1,Y_{00})\in v[n].\text{top}(x,y)	 \\
-	 V_2\parallel V_0 & \equiv(X_{01},Y_{00}-1)\in v[n].\text{bottom}(x,y)\\
-	 V_3\parallel V_0 & \equiv(X_{00}-1,Y_{01})\in v[n].\text{bottom}(x,y)\\
-	 V_4\parallel V_0 & \equiv(X_{00},Y_{01}-1)\in v[n].\text{top}(x,y)\\
+	 V_1\parallel V_0 & \equiv(X_{01},Y_{00})\in v[n].\text{top}(x,y)	 \\
+	 V_2\parallel V_0 & \equiv(X_{01},Y_{00})\in v[n].\text{bottom}(x,y)\\
+	 V_3\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{bottom}(x,y)\\
+	 V_4\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{top}(x,y)\\
 	 \end{align*}
 Den faktiske implementering af dette kan ses i appendix \ref{app:createEdges}.
-	 \item \texttt{createPathGrid() :} Denne funktion opretter en liste, \texttt{pathGrid} over lokalområdet for hver vertex. På denne måde får hver enkelt vertex kendskab til alle vertices indenfor en radius af tre vertices. Worst-case scenariet kan ses i figur \ref{fig:pathGrid}. Denne information er nødvendig for at den path der oprettes overholder den 4-point-connectivity robotton kræver. 
-\begin{figure}[h!]
-	\label{fig:pathGrid}
-	%\includegraphics[scale=1]{pathGrid}
-	\caption{Worst-case eksempel på oprettelse af pathGrid}
-\end{figure}
-	 \item \texttt{generatePath() :} Slutteligt oprettes den path robotten skal følge for at besøge alle vertices. Til dette anvendes en modificeret shortest path first algoritme som set i appendix \ref{app:generatePath}. En vertex pushes på en kø og algoritmen initialiseres. Hver vertex pusher sine naboer på køen og bliver føjet til path. Det undersøges om den nuværende vertex og det forreste element i køen er naboer, hvis dette er tilfældet fortsætter algoritmen. Hvis ikke, findes ruten fra den nuværende vertex til det forreste element i køen ved hjælp af \texttt{pathGrid} fundet i det sidste step. Når ruten er fundet føjes den til path. 
+	 \item \texttt{createPathGrid() :} Denne funktion opretter en liste, \texttt{pathGrid} over shortest-path til alle andre vertices i grafen. At opretholde alle disse \texttt{pathGrid}'s er meget dyrt i memory, men desværre nødvendig for at denne implementering af en pathfinder opretter en path der overholder den 4-point-connectivity robotton kræver.
+	 \item \texttt{generatePath() :} Slutteligt oprettes den path robotten skal følge for at besøge alle vertices. Til dette anvendes en modificeret shortest path first algoritme som set i appendix \ref{app:generatePath}. En vertex pushes på en kø og algoritmen initialiseres. Hver vertex pusher sine naboer på køen og bliver føjet til path. Det undersøges om den nuværende vertex og det forreste element i køen er naboer, hvis dette er tilfældet fortsætter algoritmen. Hvis ikke, findes ruten fra den nuværende vertex til det forreste element i køen ved hjælp af \texttt{pathGrid} fundet i det sidste step. Når ruten er fundet føjes den til path. Når algoritmen har kørt vil der være oprettet en kø indeholdene indexet på alle de regioner robotten skal besøge på sin rute.
 \end{itemize}
-Det er værd at nævne at problemet der skal løses her er et velkendt problem kaldet \textit{"Traveling Salesman Problem"}[TSP]. Formuleringen af dette problem er: Givet en række byer, hvad er den kortest mulige rute en sælger skal følge for at nå til alle byer. TSP er NP-Hard hvilket betyder at der ikke eksisterer en "pæn" løsning på problemet. 
+Det er værd at nævne at problemet der skal løses her er et velkendt problem kaldet \textit{"Traveling Salesman Problem"}[TSP]. Formuleringen af dette problem er: Givet en række byer, hvad er den kortest mulige rute en sælger skal følge for at nå til alle byer. TSP er NP-Hard hvilket betyder at der ikke eksisterer en "pæn" løsning på problemet. \\~\\
 
 \subsubsection{Dækningssti af gulvareal}
