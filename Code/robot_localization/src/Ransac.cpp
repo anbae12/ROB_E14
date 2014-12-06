@@ -15,7 +15,7 @@ void Ransac::run()
 
 void Ransac::algo()
 {
-	float maxDist = 2, minInliers = 30, maxIterations = 1000000, iterations = 0;
+	float maxDist = 3, minInliers = 40, maxIterations = 10000, iterations = 0;
 	std::vector<pixel> inliers;
 	pixel point1, point2;
 	line tempLine;
@@ -81,25 +81,53 @@ void Ransac::addPoint(uint x, uint y)
 
 void Ransac::drawLines()
 {
-	uint y;
-	Image img(1000,1000,Image::GRAY,Image::Depth16U);
+	std::string imagePath = "";
+	uint y, x;
+	static Image img(800,800,Image::GRAY,Image::Depth16U);
 	// initialize to white image
 	for(int x=0;x<img.getWidth();x++)
 		for(int y=0;y<img.getWidth();y++)
 			img.setPixel16U(x,y,65000);
 
-	for (uint i = 0; i < lines.size(); i++)
-		for(int x=0;x<img.getWidth();x++) {
-			y = lines[i].a*x + lines[i].b;
-			if (y < img.getHeight() && y > 0) {
-				img.setPixel16U(x,y,0);
-				//std::cout << "(" << x << "," << y << ")" << std::endl;
+	for (uint i = 0; i < lines.size(); i++) {
+		//std::cout << atan(lines[i].a)*180/PI << std::endl;
+		if (atan(lines[i].a)*180/PI < 45. && atan(lines[i].a)*180/PI > -45.) {
+			for(x = 0; x < img.getWidth(); x++) {
+				y = lines[i].a*x + lines[i].b;
+				if (y < img.getHeight() && y > 0) {
+					img.setPixel16U(x,y,0);
+					//std::cout << "(" << x << "," << y << ")" << std::endl;
+				}
+			}
+		} else {
+			for(y = 0; y < img.getHeight(); y++) {
+				if (isinff(lines[i].a))
+					x = lines[i].b;
+				else
+					x = (y-lines[i].b)/lines[i].a;
+
+				if (x < img.getWidth() && x > 0) {
+					img.setPixel16U(x,y,0);
+					//std::cout << "(" << x << "," << y << ")" << std::endl;
+				}
 			}
 		}
+	}
 
+	for (uint i = 0; i < points_temp.size(); i++) {
+		x = points_temp[i].get_x();
+		y = points_temp[i].get_y();
+		//std::cout << "(" << x << "," << y << ")" << std::endl;
+		if ((x < img.getWidth()-1 && x > 0) && (y < img.getHeight()-1 && y > 0)) {
+			img.setPixel16U(x,y,65000/2);
+		}
+	}
 
-	for (uint i = 0; i < points_temp.size(); i++)
-		img.setPixel16U(points_temp[i].get_x(),points_temp[i].get_y(),0);
+	imagePath = "images/ransac"+std::to_string(imagesNumber)+".pgm";
 
-	img.saveAsPGMAscii("test1.pgm");
+	img.saveAsPGMAscii(imagePath);
+	imagesNumber++;
+	lines.clear();
+	points.clear();
+	points_temp.clear();
 }

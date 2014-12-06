@@ -17,6 +17,9 @@ typedef unsigned int uint;
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <string>
+
+#define PI 3.1415926
 
 class Ransac {
 public:
@@ -26,6 +29,7 @@ public:
 	void drawLines();
 	void addPoint(uint x, uint y);
 private:
+	unsigned int imagesNumber = 0;
 	struct line {float a = 0, b = 0;};
 	float calcDist(line line, pixel pixel);
 	line calcLine(pixel point1, pixel point2);
