@@ -35,7 +35,7 @@ wavefront::~wavefront(){
     
     
     std::cout << "Destroying wavefront object!\n";
-    for (int i = 0; i < map->getHeight(); i++) {
+    for (int i = 0; i < map->getWidth(); i++) {
         delete [] wavefront_mask[i];
         wavefront_mask[i] = nullptr;
     }

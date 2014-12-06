@@ -35,6 +35,8 @@
 #define WHITE   255
 #define PI      3.1415926535
 
+#define MAX_NUMBER_OF_CUPS 3
+
 #include "robot.h"
 
 /*****************************************************************************************
@@ -95,22 +97,49 @@ bool cup_robot::move_y_direction(int direction){
 
 
 /*****************************************************************************************
- *  Moves the robot one step in x and y-direction. Up: -1 Down: 1
+ *  Moves the robot in x and y-direction. Up: -1 Down: 1
  *****************************************************************************************/
 bool cup_robot::move_x_y_direction(int direction_x, int direction_y){
-    if (validate_move(x_pos+direction_x,y_pos+direction_y)) {
+    if (validate_move(x_pos+direction_x,y_pos+direction_y)&&(direction_x||direction_y)) {
         x_pos+=direction_x;
         y_pos+=direction_y;
         walked_pixels++;
+        
+        create_snapshot(4);
+        
         return true;
     }
-    std::cout << "Invalid move in y direction, x: " << x_pos << " y: " << y_pos+direction_y << std::endl;
+    //std::cout << "Invalid move at x: " << x_pos+direction_x << " y: " << y_pos + direction_y << std::endl;
     return false;
 }
 
+/*****************************************************************************************
+ *  Force moves the robot to position
+ *****************************************************************************************/
 void cup_robot::force_move_x_y(int x, int y){
     x_pos = x;
     y_pos = y;
+}
+
+/*****************************************************************************************
+ *  Creates a snapshot of the map after a number of steps
+ *****************************************************************************************/
+void cup_robot::create_snapshot(int interval){
+    std::string zeros;
+    if (!(walked_pixels%interval)&&(counter<500)) {
+        if (counter<10000)
+            zeros = "";
+        if (counter<1000)
+            zeros = "0";
+        if (counter<100)
+            zeros = "00";
+        if (counter<10)
+            zeros = "000";
+        
+        std::string filen = "pics/testout" + zeros + std::to_string(counter) + ".pgm";
+        map->saveAsPGM(filen);
+        counter++;
+    }
 }
 
 /*****************************************************************************************
@@ -150,7 +179,7 @@ bool cup_robot::move_in_straight_line(int x_1, int y_1){
         temp_x = float_x_pos + iterator * unit_x_vector;
         temp_y = float_y_pos + iterator * unit_y_vector;
         
-        std::cout << "updated pos x: " << x_pos << " y: " << y_pos << std::endl;
+        //std::cout << "updated pos x: " << x_pos << " y: " << y_pos << std::endl;
         //std::cout << "temp x: " << float_y_pos << " y: " << temp_y << std::endl;
         
         // if the robot is one pixel from goal, move to goal
@@ -186,13 +215,6 @@ bool cup_robot::move_in_straight_line(int x_1, int y_1){
 int cup_robot::get_current_x(void){
     return x_pos;
 }
-
-
-
-
-
-
-
 
 /*****************************************************************************************
  *  Returns the current y position of the robot.
@@ -413,50 +435,94 @@ bool cup_robot::within_sensor_reach(int goal_x, int goal_y, unsigned int directi
     return false;
 }
 
+
+
 /*****************************************************************************************
  *  Covers a vertex.
  *****************************************************************************************/
 void cup_robot::cover_vertex(unsigned int goal_x, unsigned int goal_y){
     
-    bool obstacle = false;
-    int traversal_type = DOWN;
-    int direction_x, direction_y;
-    bool finished = false;
+    std::cout << "Cover x: " << goal_x << " y: " << goal_y << std::endl;
     
-    int temp_x_pos = x_pos;
-    int temp_y_pos = y_pos;
-    int start_x = x_pos, start_y = y_pos;
+    int temp_goal_x = goal_x, temp_goal_y = goal_y;
+    
+    int traversal_type = DOWN;
+    int direction_x = 0, direction_y = 0;
+    bool finished = false;
+    bool contains_pixel = false;
+    int right_steps = 0;
+    int start_y = y_pos;
     
     std::queue<pixel> cups;
     pixel temp_cup;
     pixel previous_pixel;
     
     // test if goal or start is trapped
-    if (find_direction_8C()==X||find_direction_8C(goal_x, goal_y)==X) {
+    if (find_direction_8C()==X||find_direction_8C(temp_goal_x, temp_goal_y)==X) {
         std::cout << "Can't get to goal!" << std::endl;
         return;
     }
+
     
     color_traversed_pixels(128,S);
     color_current_pixel(100);
     
     while (!finished) {
         
-        // scan for cups
+        std::cout << "pos x: " << x_pos << " y: " << y_pos << std::endl;
+        
+        contains_pixel = false;
+        
+        // scan for cups for each step
         temp_cup = cup_scanner();
         
-        // if cup is found, check if it already exists in queue
-        if (!temp_cup.is_uninitialized()&&cups.empty())
-            cups.push(temp_cup);
-        else if (!temp_cup.is_uninitialized()&&!cups.empty())
-            if (cups.back()!=temp_cup)
-                cups.push(temp_cup);
+        // if cup is found and queue is empty, insert cup
+        if (temp_cup&&located_cups.empty()){
+            located_cups.push_back(temp_cup);
+            total_number_of_cups++;
+        }
+        // only insert cup if the location is not in the vector
+        else if (temp_cup&&!located_cups.empty()){
+            // search through vector to check if cup exists
+            for (int i = 0; i<located_cups.size(); i++) {
+                if (located_cups.at(i)==temp_cup)
+                    contains_pixel = true;
+            }
+            if (!contains_pixel) {
+                located_cups.push_back(temp_cup);
+                total_number_of_cups++;
+            }
+        }
+        
+        
+        // pick up cups
+        if (!located_cups.empty()) {
+            // search all located cups
+            for (int i = 0; i<located_cups.size(); i++) {
+                // if the cup is within reach of the robot arm the cup is collected
+                if (sqrt(pow(located_cups.at(i).get_x()-x_pos,2) + pow(located_cups.at(i).get_y()-y_pos,2))<=10){
+                    std::cout << "cup located at: " << located_cups.at(i).get_x() << " y: " << located_cups.at(i).get_y() << std::endl;
+                    //std::cout << "distance to cup: " << sqrt(pow(located_cups.at(i).get_x()-x_pos,2) + pow(located_cups.at(i).get_y()-y_pos,2)) << std::endl;
+                    
+                    collect_cup(located_cups.at(i));
+                    
+                    cups_in_tray.push_back(located_cups.at(i));
+                    located_cups.erase(located_cups.begin()+i);
+                }
+            }
+        }
+        
         
         // if end of the vertex is within the radius of the robot
-        if (within_sensor_reach(goal_x, goal_y, S, radius)) {
+        if (sqrt(pow(x_pos-temp_goal_x, 2)+pow(y_pos-temp_goal_y, 2))<=radius||x_pos>temp_goal_x||y_pos>temp_goal_y) {
             finished = true;
+            std::cout << "FINISHED!" << std::endl;
         }
-        // color the pixels covered by the robot based its direction
+        
+        
+        
+        
+        // color the pixels covered by the robot based on its direction
         if (direction_x) {
             color_traversed_pixels(128,E);
         } else
@@ -464,112 +530,67 @@ void cup_robot::cover_vertex(unsigned int goal_x, unsigned int goal_y){
         
         color_current_pixel(100);
         
-        
-        move_x_direction(direction_x);
-        move_y_direction(direction_y);
+        move_x_y_direction(direction_x, direction_y);
         
         switch (traversal_type) {
             case DOWN:
             {
-                //std::cout << "current x: " << x_pos << " y: " << y_pos << std::endl;
-                
-                if (!obstacle&&(y_pos<goal_y-1)) {
-                    std::cout << "DOWN!" << std::endl;
-                    if (validate_move(x_pos, y_pos+1)) {
-                        direction_x = 0;
-                        direction_y = 1;
-                    }
-                    else {
-                        direction_y = 0;
-                        obstacle = true;
-                    }
-                } else
+                //std::cout << "DOWN!" << std::endl;
+                if (y_pos<=temp_goal_y&&validate_move(x_pos, y_pos+1)) {
+                    direction_x = 0;
+                    direction_y = 1;
+                    
+                } else {
                     traversal_type = L_TURN_DOWN;
+                }
                 
-                // save for next switch case
-                temp_x_pos = x_pos;
-                temp_y_pos = y_pos;
-                
+                right_steps = 0;
                 break;
             }
             case L_TURN_DOWN:
             {
-                std::cout << "R_TURN_DOWN!\n";
+                //std::cout << "R_TURN_DOWN!\n";
                 
-                if (sqrt(pow(x_pos-temp_x_pos, 2)+pow(y_pos-temp_y_pos, 2))<radius*2) {
-                    // test if east position is available
-                    
-                    if (validate_move(x_pos+1, y_pos)) {
-                        direction_x = 1;
-                        direction_y = 0;
-                    }
-                    // test if northeast position is available
-                    /*
-                    else if (validate_move(x_pos+1, y_pos-1)) {
-                        direction_x = -1;
-                        direction_y = -1;
-                    }
-                     */
-                } else
+                if (validate_move(x_pos+1, y_pos)&&right_steps<radius*2&&x_pos<=temp_goal_x) {
+                    direction_x = 1;
+                    direction_y = 0;
+                } else {
                     traversal_type = UP;
+                }
                 
-                obstacle = false;
-                
+                right_steps++;
                 break;
             }
             case UP:
             {
-                std::cout << "UP!" << std::endl;
+                //std::cout << "UP!" << std::endl;
                 
-                if (!obstacle&&(y_pos<start_y+1)) {
-                    if (validate_move(x_pos, y_pos-1)) {
-                        direction_x = 0;
-                        direction_y = -1;
-                    }
-                    else
-                        obstacle = true;
-                } else
+                if (validate_move(x_pos, y_pos-1)&&start_y<=y_pos) {
+                    direction_x = 0;
+                    direction_y = -1;
+                } else {
                     traversal_type = L_TURN_UP;
-                
-                // save for next switch case
-                temp_x_pos = x_pos;
-                temp_y_pos = y_pos;
+                }
+                right_steps = 0;
                 break;
             }
             case L_TURN_UP:
             {
-                std::cout << "R_TURN_UP!\n";
-                if (sqrt(pow(x_pos-temp_x_pos, 2)+pow(y_pos-temp_y_pos, 2))<radius*2) {
-                    // test if east position is available
-                    std::cout << "x: " << x_pos << " y: " << y_pos << std::endl;
-                    if (validate_move(x_pos+1, y_pos)) {
-                        direction_x = 1;
-                        direction_y = 0;
-                    }
-                    // test if southeast position is available
-                    /*
-                    else if (validate_move(x_pos+1, y_pos+1)) {
-                        direction_x = 1;
-                        direction_y = 1;
-                    }
-                     */
-                } else
+                //std::cout << "R_TURN_UP!\n";
+                
+                if (validate_move(x_pos+1, y_pos)&&right_steps<radius*2&&x_pos<=temp_goal_x) {
+                    direction_x = 1;
+                    direction_y = 0;
+                } else {
                     traversal_type = DOWN;
-                obstacle = false;
+                }
+                
+                right_steps++;
                 break;
             }
             default:
                 break;
         }
-    }
-    
-    pixel print;
-    // print cups
-    while (!cups.empty()) {
-        print = cups.front();
-        std::cout << "found cups at x: " << print.get_x() << " y: " << print.get_y() << std::endl;
-        color_pixel(print, 255);
-        cups.pop();
     }
     
     
@@ -603,6 +624,28 @@ void cup_robot::collect_cup(int x, int y){
     // if the return pixel is different from the departure pixel print error
     if (temp_x!=x_pos&&temp_y!=y_pos) {
         std::cout << "Robot is not in same position as when it went to empty cup tray!\n";
+    }
+}
+
+/*****************************************************************************************
+ *  Collects a cup (pixel value 150) and sets the pixel to white.
+ *****************************************************************************************/
+void cup_robot::collect_cup(pixel location){
+    
+    pixel temp_pos(x_pos,y_pos);
+    
+    // pick up cup (color the pixel white)
+    color_pixel(location.get_x(), location.get_y(), WHITE);
+    
+    // if 20 cups are in tray, robot needs to empty tray (robot can carry 20 cups at the time)
+    if (cups_in_tray.size()==MAX_NUMBER_OF_CUPS) {
+        empty_tray_and_return();
+        // if the return pixel is different from the departure pixel print error
+        if (temp_pos.get_x()!=x_pos&&temp_pos.get_y()!=y_pos) {
+            std::cout << "Robot is not in same position as when it went to empty cup tray!\n";
+            std::cout << "Departure x: " << temp_pos.get_x() << "\ty: " << temp_pos.get_y() << std::endl;
+            std::cout << "Current   x: " << x_pos << "\ty: " << y_pos << std::endl;
+        }
     }
 }
 
@@ -659,7 +702,10 @@ pixel cup_robot::radial_scanner(int direction, int range, int color)
  *  Empties the tray and returns to the pixel
  *****************************************************************************************/
 void cup_robot::empty_tray_and_return(void){
-    std::cout << "you should write the function 'empty_tray_and_return'!\n";
+    std::cout << "There are " << cups_in_tray.size() << " items in the tray. " << "Emptying the tray! Departure pos x: " << x_pos << " y: " << y_pos << std::endl;
+    follow_wavefront();
+    cups_in_tray.clear();
+    return_from_wavefront();
 }
 
 
@@ -667,7 +713,6 @@ void cup_robot::empty_tray_and_return(void){
  *  Make the robot follow the wavefront
  *****************************************************************************************/
 void cup_robot::follow_wavefront(){
-    
     int temp_value;
     int direction_x, direction_y;
     
@@ -686,7 +731,7 @@ void cup_robot::follow_wavefront(){
         for (int i=y_pos-1; i<y_pos+2; i++) {
             for (int j=x_pos-1; j<x_pos+2; j++) {
                 //std::cout << wavefront_mask[i][j] << "\t";
-                if (wavefront_mask[i][j]<temp_value) {
+                if (wavefront_mask[i][j]<temp_value&&wavefront_mask[i][j]!=1) {
                     temp_value = wavefront_mask[i][j];
                     // find x direction
                     if (j-x_pos+1==0)
@@ -710,13 +755,13 @@ void cup_robot::follow_wavefront(){
         
         // move robot towards goal
         move_x_y_direction(direction_x, direction_y);
-        color_pixel(x_pos, y_pos, 150);
+        color_pixel(x_pos, y_pos, 100);
         direction_x = direction_y = 0;
     }
 }
 
 void cup_robot::return_from_wavefront(){
-    std::cout << "Returning to departure position" << std::endl;
+    //std::cout << "Returning to departure position" << std::endl;
     pixel temp_position;
     int direction_x;
     int direction_y;

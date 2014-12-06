@@ -32,6 +32,7 @@ protected:
     unsigned int black = 0;
     int x_pos,y_pos;
     int radius = 4;
+    int counter = 0;
     //Image *map;
     unsigned int channel = 0; //Default channel on image
     unsigned int walked_pixels;
@@ -85,6 +86,8 @@ public:
     void follow_wavefront();
     void return_from_wavefront();
     void force_move_x_y(int x, int y);
+    void create_snapshot(int interval);
+    void collect_cup(pixel location);
 };
 
 
