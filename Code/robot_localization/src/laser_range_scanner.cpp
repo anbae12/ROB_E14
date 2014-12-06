@@ -19,6 +19,7 @@ laser_range_scanner::laser_range_scanner(std::string name):csv_reader(name){
  *  Do a complete scan and return a vector containing the points
  *****************************************************************************************/
 std::vector<pixel> laser_range_scanner::scan(){
+	single_scan.clear();
     pixel convert_from_radial(0,10);
     float angle = 235;
     float PI = 3.14159265;
