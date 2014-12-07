@@ -27,18 +27,20 @@ private:
     std::queue<pixel> wavefrontQueue;				// Used for storing edges of the wave.
     pixel goal_1;
     pixel goal_2;
-    void make_wavefront(pixel set_goal_1, pixel set_goal_2);
+    void make_wavefront(pixel set_goal_1, pixel set_goal_2, pixel set_robot);
 protected:
     Image *map;
     int** wavefront_mask;
+    void reset_wavefront();
 public:
     wavefront(Image *img);
     wavefront();
     ~wavefront();
     void color_pixel(int pixel_x, int pixel_y, int value);
     void color_pixel(pixel p, int value);
-    void make_wavefront(unsigned int set_x_1=-1, unsigned int set_y_1=-1, unsigned int set_x_2=-1, unsigned int set_y_2=-1);
+    void make_wavefront(int set_x_1=-1, int set_y_1=-1, int set_x_2=-1, int set_y_2=-1, int set_x_robot = -1, int set_y_robot = -1);
     void save_wavefront_to_map(int gradient_scale=1);
     void print_wavefront_array();
+    int** get_wavefront_mask();
 };
 #endif /* defined(__CUP_COLLECTOR__wavefront__) */

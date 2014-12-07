@@ -1,6 +1,7 @@
 \section{Planning}
 \label{sec:plan}
-\textit{All rooms in the map must be checked in order to find cups. The robot must be within 2 meters of a cup in order to actually detect the cup and within 1 meter in order to collect it. Cups are marked in the map using one pixel with grayscale value 150. Cups can be offloaded at the two offloading stations in the cantina. The offloading stations are represented with pixel values 100. The robot must start and end at an offloading station.You are free in regard in choice of algorithms. However, please document what algorithm you choose, how many kilometres the robot moves and how long it takes to calculate the path the robot takes.}
+\textit{All rooms in the map must be checked in order to find cups. The robot must be within 2 meters of a cup in order to actually detect the cup and within 1 meter in order to collect it. Cups are marked in the map using one pixel with grayscale value 150. Cups can be offloaded at the two offloading stations in the cantina. The offloading stations are represented with pixel values 100. The robot must start and end at an offloading station.
+You are free in regard in choice of algorithms. However, please document what algorithm you choose, how many kilometres the robot moves and how long it takes to calculate the path the robot takes.}
 
 \subsection{Funktioner}
 \todo[inline]{Noget kort omkring de forskellige funktioner vi har implementeret.}
@@ -16,3 +17,49 @@ Hver position i køen bliver tjekket i forhold til \emph{four-point connectivity
 
 Implementeringen kan ses i appendix \ref{app:wave}.
 \todo[inline]{how many kilometres the robot moves and how long it takes to calculate the path the robot takes??}
+
+
+
+\subsubsection{Firkantopdeling og output af diagonalsæt}
+Efter Wave-Front Planner algoritmen har kørt skal bygningens rum opdeles i firkanter og returnerer den øvre ventre koordinat og den nedre højre koordinat i en struct \emph{coordinatesPair()}. Denne funktion er derfor bestående af to trin, i det første trin opdeles bygningen i firkanter og herefter findes diagonalsættet for hver firkant.\\
+Til dannelsen af firkanter løbes hver pixel igennem af en dobbelt \emph{For Loops}, hvor hver pixel får tjekkes dens otte omkring liggende pixels, \emph{findPone()}. Tjekket af de otte omkring liggende pixels er lavet vha. simple \emph{IF Conditions}. Hvis der er match med én af de otte betingelser (P\(_{1-8}\) i figur \ref{fig:principotte}), så pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()}, på en køen \emph{queue} og pixel-værdien sættes til \emph{pointColor}.\\
+Herefter udvides hvert koordinat som findes på \emph{queue} i fire retninger; nord, syd, øst og vest, indtil enten en pixel-værdi med \emph{obstacle} eller \emph{pointColor} rammes. For hver iteration opdateres hver pixel-værdi til \emph{rectangularColor}. Dette foretages for hvert koordinat på \emph{queue}.\\
+
+I andet step laves det samme tjek, hvor de otte omkring liggende pixel-værdier tjekkes, \emph{findPtwo()}. Idet billedet er opdelt i firekanter skal der kun tjekkes for tre scenarier, P\(_{1, 3, 4}\) i figur \ref{fig:principotte}. Ligeledes hvis der er match, pushes den pågældende koordinat puls scenariet, vha. en struct \emph{coordinates()},\\
+Herefter løbes køen igennem og tjekker om scenariet P\(_{1}\) ellers foretages et \emph{pop()}. For hvert koordinat med scenariet P\(_{1}\) tjekkes om dens nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres y-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet tjekkes om nuværende pixel-værdi er \emph{pointColor} ellers inkrementeres x-koordinaten indtil den møder den næste pixel-værdi matchende \emph{pointColor}. Når denne koordinat er fundet, er det ønsket koordinatsæt fundet og pushes på en vector med en struct \emph{coordinatesPair()}.\\
+\todo[inline]{Komplexitet??}
+Implementeringen kan ses i appendix \ref{app:firkant}. 
+
+\subsection{Funktioner}
+Plangægning af coverage af gulvarealet foregår i fire trin:
+\begin{itemize}
+	\item Opdelingen af arealet i regioner.
+	\item Opret graf indeholdene alle regioner.
+	\item Planlæg rute igennem grafen således at robotten besøger alle regioner mindst én gang.
+	\item Lad robotten følge ruten fundet i foregående trin.
+\end{itemize}
+
+\subsubsection{Dannelse af grafer}
+For at navigere robotten rundt i bygningen blev det valgt at associere hvert \texttt{coordinatesPair} med en vertex og konstruere en graf på baggrund af disse. Grafen oprettes i fire trin:
+\begin{itemize}
+	\item \texttt{addVertex() :} Først oprettes hver enkelt vertex og indsættes i en liste, \texttt{vertices[n]} således at de kan tilgås ved en simpel indeksering.
+	\item \texttt{createEdges() :} Som navnet antyder sørger denne funktion for at oprette edges imellem alle tilstødene vertices. Hvorvidt en vertex grænser op mod en anden afgøres ved at undersøge forholdene imellem deres koordinater. 
+\begin{figure}[h!]
+	\label{fig:coordRelation}
+	%\includegraphics[scale=1]{coordRelation}
+	\caption{Eksempel på afgørelse om naboskab for vertex $V_0$}
+\end{figure}
+På figur \ref{fig:coordRelation} ses de fire mulige situationer der kan opstå ved oprettelse af edges til naboliggende vertices. Det gælder at: \\
+\scriptsize\emph{(Læs: $V_1$ er nabo til $V_0$ hvis og kun hvis koordinatet $(X_{01},Y_{00})$ eksisterer som top koordinat i den n'de vertex i listen vertices.)}
+\normalsize	 	 
+	 \begin{align*}
+	 V_1\parallel V_0 & \equiv(X_{01},Y_{00})\in v[n].\text{top}(x,y)	 \\
+	 V_2\parallel V_0 & \equiv(X_{01},Y_{00})\in v[n].\text{bottom}(x,y)\\
+	 V_3\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{bottom}(x,y)\\
+	 V_4\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{top}(x,y)\\
+	 \end{align*}
+Den faktiske implementering af dette kan ses i appendix \ref{app:createEdges}.
+	 \item \texttt{createPathGrid() :} Denne funktion opretter en liste, \texttt{pathGrid} over shortest-path til alle andre vertices i grafen. At opretholde alle disse \texttt{pathGrid}'s er meget dyrt i memory, men desværre nødvendig for at denne implementering af en pathfinder opretter en path der overholder den 4-point-connectivity robotton kræver.
+	 \item \texttt{generatePath() :} Slutteligt oprettes den path robotten skal følge for at besøge alle vertices. Til dette anvendes en modificeret shortest path first algoritme som set i appendix \ref{app:generatePath}. En vertex pushes på en kø og algoritmen initialiseres. Hver vertex pusher sine naboer på køen og bliver føjet til path. Det undersøges om den nuværende vertex og det forreste element i køen er naboer, hvis dette er tilfældet fortsætter algoritmen. Hvis ikke, findes ruten fra den nuværende vertex til det forreste element i køen ved hjælp af \texttt{pathGrid} fundet i det sidste step. Når ruten er fundet føjes den til path. Når algoritmen har kørt vil der være oprettet en kø indeholdene indexet på alle de regioner robotten skal besøge på sin rute.
+\end{itemize}
+Det er værd at nævne at problemet der skal løses her er et velkendt problem kaldet \textit{"Traveling Salesman Problem"}[TSP]. Formuleringen af dette problem er: Givet en række byer, hvad er den kortest mulige rute en sælger skal følge for at nå til alle byer. TSP er NP-Hard hvilket betyder at der ikke eksisterer en "pæn" løsning på problemet. \\~\\

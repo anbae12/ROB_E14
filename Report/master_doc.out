@@ -1,0 +1,28 @@
+\BOOKMARK [1][-]{section.1}{Introduktion og begr\346nsninger}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Hvad skal afleveres?}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Planning}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Funktioner}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Funktioner}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Coverage}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Funktioner}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{Localization}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Funktioner}{section.4}% 9
+\BOOKMARK [1][-]{section.5}{Resultater}{}% 10
+\BOOKMARK [2][-]{subsection.5.1}{Planning}{section.5}% 11
+\BOOKMARK [2][-]{subsection.5.2}{Coverage}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.3}{Localization}{section.5}% 13
+\BOOKMARK [1][-]{section.6}{Konklusion}{}% 14
+\BOOKMARK [1][-]{section.7}{Perspektivering}{}% 15
+\BOOKMARK [1][-]{section*.14}{Appendices}{}% 16
+\BOOKMARK [1][-]{Bilag.a.A}{Planning}{}% 17
+\BOOKMARK [2][-]{subsection.a.A.1}{Wave-Front Planner}{Bilag.a.A}% 18
+\BOOKMARK [2][-]{subsection.a.A.2}{Implementering af grafer}{Bilag.a.A}% 19
+\BOOKMARK [2][-]{subsection.a.A.3}{pathPlanner.h}{Bilag.a.A}% 20
+\BOOKMARK [2][-]{subsection.a.A.4}{pathPlanner.c : void getPath\(\)}{Bilag.a.A}% 21
+\BOOKMARK [2][-]{subsection.a.A.5}{pathPlanner.c : void createPathGrid\(\)}{Bilag.a.A}% 22
+\BOOKMARK [2][-]{subsection.a.A.6}{pathPlanner.c : void generatePath\(\)}{Bilag.a.A}% 23
+\BOOKMARK [2][-]{subsection.a.A.7}{pathPlanner.c : void createEdges\(\)}{Bilag.a.A}% 24
+\BOOKMARK [2][-]{subsection.a.A.8}{pathPlanner.c : void addVertex\(\)}{Bilag.a.A}% 25
+\BOOKMARK [1][-]{Bilag.a.B}{Coverage}{}% 26
+\BOOKMARK [2][-]{subsection.a.B.1}{Firkantopdeling og output af diagonals\346t}{Bilag.a.B}% 27
+\BOOKMARK [1][-]{Bilag.a.C}{Localization}{}% 28

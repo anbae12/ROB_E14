@@ -45,6 +45,13 @@ wavefront::~wavefront(){
 }
 
 /*****************************************************************************************
+ *  Get ref to array
+ *****************************************************************************************/
+int** wavefront::get_wavefront_mask(){
+    return wavefront_mask;
+}
+
+/*****************************************************************************************
  *  Color the pixel
  *****************************************************************************************/
 void wavefront::color_pixel(int pixel_x, int pixel_y, int value){
@@ -88,7 +95,6 @@ void wavefront::initialize_to_zero_and_ones(){
                 wavefront_mask[y][x] = 0;
             }
     
-    //
     for (int y = 0; y < map->getHeight(); y++)
         for (int x = 0; x < map->getWidth(); x++)
             if (wavefront_mask[y][x] == 1)
@@ -98,13 +104,23 @@ void wavefront::initialize_to_zero_and_ones(){
 }
 
 /*****************************************************************************************
+ *  Resets the wavefront mask
+ *****************************************************************************************/
+void wavefront::reset_wavefront(){
+    for (int y = 0; y < map->getHeight(); y++)
+        for (int x = 0; x < map->getWidth(); x++)
+            if (wavefront_mask[y][x] != 1)
+                wavefront_mask[y][x] = 0;
+}
+
+/*****************************************************************************************
  *  Makes a wavefront from one or two points
  *****************************************************************************************/
 
-void wavefront::make_wavefront(pixel set_goal_1, pixel set_goal_2=pixel(-1,-1)){
-    
+void wavefront::make_wavefront(pixel set_goal_1, pixel set_goal_2=pixel(-1,-1), pixel set_robot=pixel(-1,-1)){
     goal_1 = set_goal_1;
     goal_2 = set_goal_2;
+    bool finished = false;
     
     if (set_goal_1) {
         wavefront_mask[goal_1.get_y()][goal_1.get_x()] = 2; // Label the goal with a two.
@@ -149,8 +165,9 @@ void wavefront::make_wavefront(pixel set_goal_1, pixel set_goal_2=pixel(-1,-1)){
             // Make sure it not will go off the picture.
             if (tempPos.get_x() <= map->getWidth() - 1 && tempPos.get_y() <= map->getHeight() - 1 && tempPos.get_x() >= 0 && tempPos.get_y() >= 0) {
                 //Is that pos free.
-                if (wavefront_mask[tempPos.get_y()][tempPos.get_x()] == 0) {
-                    wavefront_mask[tempPos.get_y()][tempPos.get_x()] = wavefront_mask[currentPos.get_y()][currentPos.get_x()] + 1; // Then increment the wavevalue and insert it.
+                if ((wavefront_mask[tempPos.get_y()][tempPos.get_x()]==0)&&(wavefront_mask[currentPos.get_y()][currentPos.get_x()]>1)) {
+                    // Then increment the wavevalue and insert it.
+                    wavefront_mask[tempPos.get_y()][tempPos.get_x()] = wavefront_mask[currentPos.get_y()][currentPos.get_x()] + 1;
                     wavefrontQueue.push(tempPos); // And push that pos for further checking.
                 }
             }
@@ -158,19 +175,24 @@ void wavefront::make_wavefront(pixel set_goal_1, pixel set_goal_2=pixel(-1,-1)){
         
         //Done with that pixel, remove it from the queue
         wavefrontQueue.pop();
+        
+        
+        if (set_robot == currentPos) {
+            std::cout << "wavefront: " << set_robot.get_x() << "," << set_robot.get_y() << ";" << currentPos.get_x() << "," << currentPos.get_y() << std::endl;
+            break;
+        }
     }
     
     
 }
 
-
 /*****************************************************************************************
  *  Makes a wavefront from one or two points
  *****************************************************************************************/
-void wavefront::make_wavefront(unsigned int set_x_1, unsigned int set_y_1, unsigned int set_x_2, unsigned int set_y_2){
-    pixel g1(set_x_1,set_y_1), g2(set_x_2,set_y_2);
-    std::cout << "x1: " << g1.get_x() << " y1: " << g1.get_y() << " x2: " << g2.get_x() << " y2: " << g2.get_y() << std::endl;
-    make_wavefront(g1,g2);
+void wavefront::make_wavefront(int set_x_1, int set_y_1, int set_x_2, int set_y_2, int set_x_robot, int set_y_robot){
+    pixel g1(set_x_1,set_y_1), g2(set_x_2,set_y_2), robot(set_x_robot, set_y_robot);
+    //std::cout << "x1: " << g1.get_x() << " y1: " << g1.get_y() << " x2: " << g2.get_x() << " y2: " << g2.get_y() << std::endl;
+    make_wavefront(g1,g2,robot);
 
 }
 

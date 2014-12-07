@@ -88,6 +88,7 @@ public:
     void force_move_x_y(int x, int y);
     void create_snapshot(int interval);
     void collect_cup(pixel location);
+    void move_to_vertex(int goal_x, int goal_y);
 };
 
 
