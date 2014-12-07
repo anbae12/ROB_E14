@@ -1,0 +1,86 @@
+\section{Coverage}
+\label{sec:cov}
+\textit{The Dean feels that it is not economically justified to by a robot system for 80.000 euro just to collect cups. Hence, it is interesting to have the robot do a second task, namely washing of the floors. Therefore calculate a coverage path that covers most of the floor in the map. Again the robot must start and end at the offloading stations.
+Again, you are free to choose algorithm and you should document the choice, the distance in kilometres that the robot moves and how long it takes to compute the coverage path.}
+
+
+\subsection{Funktioner}
+
+Følgende er en oversigt over relavante funktioner i Coverage delen.
+
+\begin{itemize}
+	\item cover\_vertex(goal\_x,goal\_y)
+	\begin{itemize}
+		\item cup\_scanner()
+		\item collect\_cup(location)
+	\end{itemize}
+	
+\end{itemize}
+
+\paragraph{\texttt{cover\_vertex(goal\_x,goal\_y)}}
+Robotten vasker en vertex fra den lokation den befinder sig på, til det punkt der er givet som argument. For hvert skridt den tager, udfører den en komplet skanning efter kopper. Da robotten kan detektere kopper i en radius af to meter, men kun kan samle dem op i en radius af en meter, bliver de detekterede koppers lokation lagt ind i en kø. For hvert skridt robotten tager, checker den om de detekterede kopper i køen er indenfor rækkevidde, hvorefter de kan blive samlet op.
+
+\texttt{cover\_vertex(goal\_x,goal\_y)} kan beskrives som det følgende:
+\begin{lstlisting}
+while !finished
+	scan for cups
+		if cup detected
+			save to found cups vector
+	if found cup is within range && cups in tray < max number of cups
+		pick up cup
+	if tray is full
+		empty cups and return
+	switch case:
+		walk down 
+			if y-goal !reached
+				y position++
+			else walk from bottom
+		walk right from bottom 
+			if x-goal !reached&&rightsteps<2xradius
+				x position++
+			else walk up
+		walk up
+			if start y !reached
+				y position--
+			else walk right from top
+		walk right from top
+			if x-goal !reached&&rightsteps<2xradius
+				x position++
+			else walk down
+	if goal is within reach
+		finish=true
+\end{lstlisting}
+
+
+\texttt{cover\_vertex(goal\_x,goal\_y)} kan beskrives som det følgende:
+\begin{lstlisting}
+while !finished
+	scan for cups
+		if cup detected
+			save to found cups vector
+	if found cup is within range && cups in tray < max number of cups
+		pick up cup
+	if tray is full
+		empty cups and return
+	switch case:
+		walk down 
+			if y-goal !reached
+				y position++
+			else walk from bottom
+		walk right from bottom 
+			if x-goal !reached&&rightsteps<2xradius
+				x position++
+			else walk up
+		walk up
+			if start y !reached
+				y position--
+			else walk right from top
+		walk right from top
+			if x-goal !reached&&rightsteps<2xradius
+				x position++
+			else walk down
+	if goal is within reach
+		finish=true
+\end{lstlisting}
+
+\subsubsection{Dækningssti af gulvareal}
