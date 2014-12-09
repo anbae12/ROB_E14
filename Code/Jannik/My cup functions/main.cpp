@@ -3,6 +3,7 @@
 #include "PPMLoader.hpp"
 #include "robot.h"
 #include "pathPlanner.h"
+#include "clock_timer.h"
 
 #define FALSE	0
 #define TRUE	1
@@ -12,10 +13,16 @@ using namespace rw::sensor;
 using namespace rw::loaders;
 
 int main(int argc, char** argv) {
+    clock_timer timerrecord;
+    
+    
     std::string filename= "/Users/Anders/Documents/complete.pgm";
     std::cout << "loading image..." << std::endl;
+    timerrecord.start_timer();
     Image* img = PPMLoader::load(filename);
-
+  
+    
+    
     cup_robot run(28, 1147, 4, img);
     run.make_wavefront(2404, 1318, 2858, 1324);
     run.findDiagonals();
@@ -27,11 +34,14 @@ int main(int argc, char** argv) {
         run.move_to_vertex(vertex->x, vertex->y);
         run.cover_vertex(vertex->Xx, vertex->Yy);
     }
-
+    timerrecord.stop_timer();
 
     std::cout << "last location x: " << run.get_current_x() << " y: " << run.get_current_y() << std::endl;
     std::cout << "number of steps: " << run.get_walked_pixels() << std::endl;
     std::cout << "number of cups collected: " << run.get_total_number_of_cups() << std::endl;
+    std::cout << "operations time: " << timerrecord.duration <<"[min]"<< std::endl;
+    std::cout << "total antal kopper: " << run.kopIterator<< std::endl;
+    
     std::cout << "\nsaving image..." << std::endl;
     // save image
     img->saveAsPGM("testout.pgm");

@@ -58,7 +58,7 @@ private:
     
 public:
     findpoints(Image *img);
-
+    int kopIterator = 0;
     void findDiagonals();
     typedef std::vector<coordinatesPair> queueOfPoints2;
     queueOfPoints2 queuePair;

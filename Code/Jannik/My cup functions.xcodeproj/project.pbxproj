@@ -17,6 +17,7 @@
 		9A45DF8F1A2B540500B86E92 /* pixel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A45DF8D1A2B540500B86E92 /* pixel.cpp */; };
 		9A45DF921A2B541100B86E92 /* findPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A45DF901A2B541100B86E92 /* findPoints.cpp */; };
 		9A45DF951A2B542E00B86E92 /* wavefront.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A45DF931A2B542E00B86E92 /* wavefront.cpp */; };
+		9A9F081B1A36177600183A38 /* clock_timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A9F08191A36177600183A38 /* clock_timer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,8 @@
 		9A45DF911A2B541100B86E92 /* findPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findPoints.h; sourceTree = "<group>"; };
 		9A45DF931A2B542E00B86E92 /* wavefront.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wavefront.cpp; sourceTree = "<group>"; };
 		9A45DF941A2B542E00B86E92 /* wavefront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wavefront.h; sourceTree = "<group>"; };
+		9A9F08191A36177600183A38 /* clock_timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clock_timer.cpp; sourceTree = "<group>"; };
+		9A9F081A1A36177600183A38 /* clock_timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clock_timer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				9A1695251A2327B300D2F021 /* main.cpp */,
+				9A9F08191A36177600183A38 /* clock_timer.cpp */,
+				9A9F081A1A36177600183A38 /* clock_timer.h */,
 				9A1695361A232CD700D2F021 /* robot2D.cpp */,
 				9A1695371A232CD700D2F021 /* robot2D.h */,
 				9A1695391A232D0A00D2F021 /* vector2D.cpp */,
@@ -170,6 +175,7 @@
 				9A16953B1A232D0A00D2F021 /* vector2D.cpp in Sources */,
 				9A45DF951A2B542E00B86E92 /* wavefront.cpp in Sources */,
 				9A1695381A232CD700D2F021 /* robot2D.cpp in Sources */,
+				9A9F081B1A36177600183A38 /* clock_timer.cpp in Sources */,
 				9A1695321A2327EF00D2F021 /* PPMLoader.cpp in Sources */,
 				9A1695261A2327B300D2F021 /* main.cpp in Sources */,
 				9A45DF921A2B541100B86E92 /* findPoints.cpp in Sources */,

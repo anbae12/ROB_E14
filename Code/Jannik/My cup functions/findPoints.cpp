@@ -21,6 +21,9 @@ void findpoints::createArray(){
     for (int j=0; j<map->getWidth(); j++) {
         for (int k=0; k<map->getHeight(); k++) {
             array3D[j][k]=map->getPixelValuei(j, k, channel);
+//            if (map->getPixelValuei(j, k, channel)==150) {
+//                ++kopIterator;
+//            }
         }
     }
 }
