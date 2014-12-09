@@ -53,10 +53,12 @@ Implementeringen nævnte funktioner findes i \emph{findPoints.h} og \emph{findPo
 
 
 \subsubsection{ \textcolor{red}{Grafer}}
+\todo[inline]{mangler at tage stilling til om dette her skal bruges.}
 For at navigere robotten rundt i bygningen blev det valgt at associere hvert \emph{coordinatesPair()} med en vertex og konstruere en graf på baggrund af disse. Grafen oprettes i fire trin:
 \begin{itemize}
 	\item \emph{addVertex():} Først oprettes hver enkelt vertex og indsættes i en liste, \emph{vertices[n]} således at de kan tilgås ved en simpel indeksering.
 	\item \emph{createEdges():} Som navnet antyder sørger denne funktion for at oprette edges imellem alle tilstødende vertices. Hvorvidt en vertex grænser op mod en anden afgøres ved at undersøge forholdene imellem deres koordinater. 
+\todo[inline]{der mangler en figur?}
 \begin{figure}[h!]
 	\label{fig:coordRelation}
 	%\includegraphics[scale=1]{coordRelation}
@@ -80,8 +82,8 @@ Det er værd at nævne at problemet der skal løses her er et velkendt problem k
 
 \subsubsection{Flytning af robot til ny region}
 
-Idet det ikke lykkedes at få en komplet graf implementering af alle regionerne, var næste løsning at implementere en \emph{Wave-Front Planner} algoritme som finder den korteste rute mellem nuværende position og start positionen på den næste region.
-
+Idet det ikke lykkedes at få en komplet graf implementering af alle regionerne, var næste løsning at implementere en \emph{Wave-Front Planner} algoritme som finder den korteste rute mellem nuværende position og start positionen på den næste region. Princippet er præcis det samme som den tidligere nævnt.
+\todo[inline]{Jeg ved ikke hvad der mere skal skrives til denne her.}
 
 
 

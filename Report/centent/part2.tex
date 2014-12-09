@@ -52,8 +52,18 @@ while !finished
 \end{lstlisting}
 
 
-
+\newpage
 \subsection{Resultater}
+Figur \ref{fig:res} viser et lille uddrag af dækningsarealet. Det originale kort samt en .gif animation af robottens proces er uploadet.\todo{.gif part 1 og 2 fylder for meget.}
+\begin{figure}[th!]
+\centering
+\includegraphics[width=0.5\textwidth]{./graphics/efterVask}
+\caption[tekst i indholdsfortegnelsen]{Udsnit af dækningsareal.}
+\label{fig:res}
+\end{figure}
+Den store fordel med den besluttede regionsopdeling er, at den virker rigtig godt for firkantet rum. Hvis rummene derimod ikke er firkantet som set i figur \ref{fig:res}, er regionsopdelingen mindre effektiv. Dette skyldes der dannelse af regioner med intet indvendigt areal. Regioner med intet indvendigt areal vil ikke returnere et af det fire scenarier P\(_{1, 9, 10, 11}\) i \emph{stageTwo()} og herved vil den endelige region ikke blive oprettet.
+En måde at løse denne problemstilling på kunne være at implementere en \emph{Bush Fire} algoritme i hvert rum og første gang lad den brænde robottens radius ind fra væggene og herefter lad den brænde robottens diameter indtil hele rummet er "brændt af".
+
 
 Opsummerende resultater fra part 1 og 2 ses i tabel \ref{tb:resultater}. 
 
@@ -61,29 +71,18 @@ Opsummerende resultater fra part 1 og 2 ses i tabel \ref{tb:resultater}.
 \centering
 \begin{tabular}{l|l}
 \# & \\\hline
-Operations tid & 9,44 min \\
+Beregnings tid af regioner & 6,809 s \\
 Antal regioner & 4178 stk\\
+Beregnings tid af vaks og opsamling af kopper & 8,14 min \\
 Antal opsamlet kopper & 267 stk\\
-Total distance kørt & 86,37 km
+Total distance kørt & 86,37 km\\
+Operations tid for robot & 17,27 t
 \end{tabular}
 \captionsetup{type=table}
-\caption[tekst i indholdsfortegnelsen]{tabeltekst}
+\caption[tekst i indholdsfortegnelsen]{Opsummerende resultater fra robotten.}
 \label{tb:resultater}
 \end{figure}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Som det fremgår af tabel \ref{tb:resultater} tager det knap 7 sekunder at inspicere alle rum og knap 9,5 minut at vaske gulvarealerne. Ligeledes fremgår det at robotten har en total operations tid på 17,27 timer med en hastighed på 5 km/t. 
 
 
 

@@ -21,9 +21,6 @@ void findpoints::createArray(){
     for (int j=0; j<map->getWidth(); j++) {
         for (int k=0; k<map->getHeight(); k++) {
             array3D[j][k]=map->getPixelValuei(j, k, channel);
-//            if (map->getPixelValuei(j, k, channel)==150) {
-//                ++kopIterator;
-//            }
         }
     }
 }
@@ -206,7 +203,7 @@ void findpoints::findPtwo(){
                         array3D[j-1][k] == rectangularColor &&
                         array3D[j][k+1] == rectangularColor &&
                         array3D[j][k-1] == rectangularColor) {
-                    queue.push(coordinates(j,k,2));
+                    queue.push(coordinates(j,k,9));
                 }
                 // 10 bottom
                 else if(array3D[j][k] == freeSpace &&
@@ -214,7 +211,7 @@ void findpoints::findPtwo(){
                         array3D[j+1][k] == rectangularColor &&
                         array3D[j][k-1] == rectangularColor &&
                         array3D[j][k+1] == freeSpace) {
-                    queue.push(coordinates(j,k,3));
+                    queue.push(coordinates(j,k,10));
                 }
                 // 11 center
                 if(array3D[j][k] == freeSpace &&
@@ -226,7 +223,7 @@ void findpoints::findPtwo(){
                    array3D[j+1][k+1] == rectangularColor &&
                    array3D[j-1][k+1] == rectangularColor &&
                    array3D[j+1][k+1] == rectangularColor) {
-                    queue.push(coordinates(j,k,4));
+                    queue.push(coordinates(j,k,11));
                 }
                 
             }
@@ -252,21 +249,21 @@ void findpoints::stageTwo(){
             queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
             queue.pop();
         }
-        else if(queue.front().z==2){
+        else if(queue.front().z==9){
             while (array3D[tempJ+1][tempK]!=rectangularColor){
                 ++tempJ;
             }
             queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
             queue.pop();
         }
-        else if(queue.front().z==3){
+        else if(queue.front().z==10){
             while (array3D[tempJ][tempK+1]!=rectangularColor){
                 ++tempK;
             }
             queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
             queue.pop();
         }
-        else if(queue.front().z==4){
+        else if(queue.front().z==11){
             queuePair.push_back(coordinatesPair(J-1, K-1, tempJ+1, tempK+1));
             array3D[J][K]=obstacleImage;
             queue.pop();

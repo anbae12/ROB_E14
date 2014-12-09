@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     
     cup_robot run(28, 1147, 4, img);
     run.make_wavefront(2404, 1318, 2858, 1324);
+    std::cout<<"test"<<std::endl;
     run.findDiagonals();
 
     std::cout << "nr of v: " << run.queuePair.size() << std::endl;
@@ -39,8 +40,8 @@ int main(int argc, char** argv) {
     std::cout << "last location x: " << run.get_current_x() << " y: " << run.get_current_y() << std::endl;
     std::cout << "number of steps: " << run.get_walked_pixels() << std::endl;
     std::cout << "number of cups collected: " << run.get_total_number_of_cups() << std::endl;
-    std::cout << "operations time: " << timerrecord.duration <<"[min]"<< std::endl;
-    std::cout << "total antal kopper: " << run.kopIterator<< std::endl;
+    std::cout << "operations time: " << timerrecord.duration/1000/60 <<"[min]"<< std::endl;
+
     
     std::cout << "\nsaving image..." << std::endl;
     // save image
