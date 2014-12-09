@@ -3,8 +3,22 @@
 \textit{Finally, a method to compute the state (configuration) of the robot is required. The method should be applied to a real system such as the Nexus platform from the course and due to the size of the university it is important that the robot is able to use features to precisely measure its whereabouts. These features could be based on the Hokoyo 2D laser scanner mounted on the robot.\\Again document what algorithm, and test how well it performs. You should at least write what model you choose for the robot and show that the localization works better than odometry alone.Note: The map ”complete\_map\_project.pgm” use a scale 10pixel:1m.}
 
 \subsection{Funktioner}
-\todo[inline]{Noget kort omkring de forskellige funktioner vi har implementeret.}
+For at finde features omkring robotten er data fra, Hokoyo 2D laser scanner, blevet brugt. Data sættet består af 1705 scans optaget med Hokoyo's eget program, UrgBenri. Optagelsen er foretaget fra en enden af en gang, til den anden, i E fløjen på SDU. Det optaget data fra UrgBenri er herefter blevet exporteret til en csv fil for behandling i et c++ program. 
 
-\subsubsection{Funktioner}
-\subsubsection{Funktioner}
-\subsubsection{Funktioner}
+\subsection{Konveter data til koordinater}
+For hver scan er der 681 datapunkter, som beskriver afstanden i millimeter. Hokoyo scanneren har en opløsning på $0.36^\circ$ pr. måling, så kan $x$ og $y$ udregnes således:
+
+\begin{equation}
+x=l\cdot \sin\left(-\theta\cdot \frac{\pi}{180^\circ}\right)
+\end{equation}
+
+\begin{equation}
+y=l\cdot \cos\left(-\theta\cdot \frac{\pi}{180^\circ}\right)
+\end{equation}
+
+hvor $l$ er længden til datapunktet i millimeter og $\theta$ er den vinkel Hokoyo scanneren er noget til. Dette gøres for alle 681 scans, hvor $\theta$ bliver incrementeret med $ 0.36^\circ$ for hver scan. De udregnet koordinater gemmes herefter i en vector for yderligere behandling. 
+
+\subsection{Find features}
+Ved brug af Ransac algoritmen, søges der efter linjer i hvert scan. Ransac algoritmen er implementeret som den står i bogen og tager imod vectoren med de 681 koordinater fundet ovenfor. Den gemmer så de fundene linjer, så de er klar til at blive sammenlignet med kortet. Ved at sammenligne linjerne med kortet kan robotten verificere at den faktisk er det rigtig sted på kortet og ikke kun skal stole på sin odometry. Dette betyder også at robotten kan flyttes og efter lidt kørsel kan den finde sig selv på kortet.
+
+\subsection{Resultater}

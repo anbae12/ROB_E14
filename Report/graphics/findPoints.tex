@@ -3,6 +3,14 @@
 \draw[fill=black](-3,1)--++(6,0)--++(0,-2)--++(-2,0)--++(0,-2)--++(-2,0)--++(0,2)--++(-2,0)--++(0,2);
 \draw[fill=black](-5,10)--++(10,0)--++(0,-8)--++(-10,0)--++(0,8);
 \draw[fill=white](-3,8)--++(6,0)--++(0,-4)--++(-6,0)--++(0,4);
+\draw[fill=black](-8,1)--++(3,0)--++(0,-5)--++(-1,0)--++(0,4)--++(-1,0)--++(0,-4)--++(-1,0)--++(0,5);
+
+
+\draw[fill=black](3,-11)--++(0,3)--++(5,0)--++(0,-1)--++(-4,0)--++(0,-1)--++(4,0)--++(0,-1)--++(-5,0);
+
+\draw[fill=black](-5,-6)--++(0,-3)--++(-3,0)--++(0,3);
+\draw[fill=white](-7,-7)--++(0,-1)--++(1,0)--++(0,1)-++(-1,0);
+
 
 % Possible positions:
 \node[color=red] at (2.5,4.5) {P\(_{4}\)};
@@ -10,10 +18,16 @@
 \node[color=red] at (2.5,7.5) {P\(_{2}\)};
 \node[color=red] at (-2.5,7.5) {P\(_{1}\)};
 
-\node[color=red] at (1.5,-3.5) {P\(_{6}\)};;
-\node[color=red] at (-1.5,-3.5) {P\(_{5}\)};;
+\node[color=red] at (1.5,-3.5) {P\(_{6}\)};
+\node[color=red] at (-1.5,-3.5) {P\(_{5}\)};
 \node[color=red] at (1.5,-5.5) {P\(_{8}\)};
-\node[color=red] at (-1.5,-5.5) {P\(_{7}\)};;
+\node[color=red] at (-1.5,-5.5) {P\(_{7}\)};
+
+
+\node[color=red] at (-6.5,-0.5) {P\(_{10}\)};
+\node[color=red] at (4.5,-9.5) {P\(_{9}\)};
+\node[color=red] at (-6.5,-7.5) {P\(_{11}\)};
+
 
 % Check for obstacles 
 \node[color=white] at (-3.5,5.5) {Ob};
@@ -45,6 +59,25 @@
 
 \node[color= white] at (-0.5,-6.5) {Ob};
 \node[color=white] at (0.5,-6.5) {Ob};
+
+\node[color= white] at (-6.5,0.5) {Ob};
+\node[color= white] at (-7.5,-0.5) {Ob};
+\node[color= white] at (-5.5,-0.5) {Ob};
+
+\node[color= white] at (3.5,-9.5) {Ob};
+\node[color= white] at (4.5,-8.5) {Ob};
+\node[color= white] at (4.5,-10.5) {Ob};
+
+\node[color= white] at (-7.5,-7.5) {Ob};
+\node[color= white] at (-5.5,-7.5) {Ob};
+
+\node[color= white] at (-7.5,-6.5) {Ob};
+\node[color= white] at (-6.5,-6.5) {Ob};
+\node[color= white] at (-5.5,-6.5) {Ob};
+
+\node[color= white] at (-7.5,-8.5) {Ob};
+\node[color= white] at (-6.5,-8.5) {Ob};
+\node[color= white] at (-5.5,-8.5) {Ob};
 
 % Check for free space
 \node at (0.5,-3.5) {Fr};
@@ -92,6 +125,10 @@
 \node at (-1.5,6.5) {Fr};
 \node at (1.5,7.5) {Fr};
 \node at (-1.5,7.5) {Fr};
+
+\node at (-6.5,-1.5) {Fr};
+\node at (5.5,-9.5) {Fr};
+
 
 % Description
 \node[color=red] at (7.025,-2.5) {P = Possible Check Position};
@@ -160,6 +197,3 @@
 \draw[dotted,color=gray](-8,-3)--++(16,0);
 \draw[dotted,color=gray](-8,-2)--++(16,0);
 \draw[dotted,color=gray](-8,-1)--++(16,0);
-
-
-
