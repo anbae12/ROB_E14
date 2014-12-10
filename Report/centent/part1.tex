@@ -53,16 +53,19 @@ Implementeringen nævnte funktioner findes i \emph{findPoints.h} og \emph{findPo
 
 
 \subsubsection{ \textcolor{red}{Grafer}}
-\todo[inline]{mangler at tage stilling til om dette her skal bruges.}
 For at navigere robotten rundt i bygningen blev det valgt at associere hvert \emph{coordinatesPair()} med en vertex og konstruere en graf på baggrund af disse. Grafen oprettes i fire trin:
 \begin{itemize}
 	\item \emph{addVertex():} Først oprettes hver enkelt vertex og indsættes i en liste, \emph{vertices[n]} således at de kan tilgås ved en simpel indeksering.
 	\item \emph{createEdges():} Som navnet antyder sørger denne funktion for at oprette edges imellem alle tilstødende vertices. Hvorvidt en vertex grænser op mod en anden afgøres ved at undersøge forholdene imellem deres koordinater. 
-\todo[inline]{der mangler en figur?}
+
 \begin{figure}[h!]
+	
+	\centering
+\begin{tikzpicture}[scale=1]
+    \include*{./graphics/coord}
+    \end{tikzpicture}
+	\caption{Eksempel på afgørelse om naboskab for vertex $V_0$.}
 	\label{fig:coordRelation}
-	%\includegraphics[scale=1]{coordRelation}
-	\caption{Eksempel på afgørelse om naboskab for vertex $V_0$}
 \end{figure}
 På figur \ref{fig:coordRelation} ses de fire mulige situationer der kan opstå ved oprettelse af edges til naboliggende vertices. Det gælder at: \\
 \scriptsize\emph{(Læs: $V_1$ er nabo til $V_0$ hvis og kun hvis koordinatet $(X_{01},Y_{00})$ eksisterer som top koordinat i den n'de vertex i listen vertices.)}
@@ -73,7 +76,6 @@ På figur \ref{fig:coordRelation} ses de fire mulige situationer der kan opstå 
 	 V_3\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{bottom}(x,y)\\
 	 V_4\parallel V_0 & \equiv(X_{00},Y_{01})\in v[n].\text{top}(x,y)\\
 	 \end{align*}
-Den faktiske implementering af dette kan ses i appendix \ref{app:createEdges}.
 	 \item \emph{createPathGrid():} Denne funktion opretter en liste, \emph{pathGrid} over shortest-path til alle andre vertices i grafen. At opretholde alle disse \emph{pathGrid}'s er meget dyrt i memory, men desværre nødvendig for at denne implementering af en pathfinder opretter en path der overholder den 4-point-connectivity robotten kræver.
 	 \item \emph{generatePath():} Slutteligt oprettes den path robotten skal følge for at besøge alle vertices. Til dette anvendes en modificeret shortest path first algoritme som set i appendix \ref{app:generatePath}. En vertex pushes på en kø og algoritmen initialiseres. Hver vertex pusher sine naboer på køen og bliver føjet til path. Det undersøges om den nuværende vertex og det forreste element i køen er naboer, hvis dette er tilfældet fortsætter algoritmen. Hvis ikke, findes ruten fra den nuværende vertex til det forreste element i køen ved hjælp af \emph{pathGrid} fundet i det sidste step. Når ruten er fundet føjes den til path. Når algoritmen har kørt vil der være oprettet en kø indeholdene indexet et på alle de regioner robotten skal besøge på sin rute.
 \end{itemize}
